@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3144a7</color>
+    <color name="colorPrimaryDark">#26327e</color>
+    <color name="colorAccent">#c7000770</color>
+    <color name="roundButton">#3b4181</color>
+    <color name="bg_splash">#000000</color>
+</resources>

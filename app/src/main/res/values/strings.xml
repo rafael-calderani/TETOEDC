@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TETO - EDC</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="sampleEmail">edc@teto.org.br</string>
+    <string name="schedule">Schedule</string>
+    <string name="scheduleHint">Click here to navigate to the Schedule screen.</string>
+    <string name="projects">Projects</string>
+    <string name="projectsHint">Click here to navigate to the Projects screen.</string>
+    <string name="news">News</string>
+    <string name="newsHint">Click here to view latest info about meetings or projects published by your team.</string>
+    <string name="mainScreenText">Welcome [UserName], you belong to the [EDCName] and your next meeting will be on [NextMeetingDate].</string>
+    <string name="user_image">User Image</string>
+</resources>
