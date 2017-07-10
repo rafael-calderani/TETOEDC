@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news">Novidades</string>
+    <string name="projects">Projetos</string>
+    <string name="projectsHint">Clique aqui para ir a tela de projetos.</string>
+    <string name="action_settings">Configurações</string>
+    <string name="navigation_drawer_open">Abrir menu</string>
+    <string name="navigation_drawer_close">Fechar menu</string>
+    <string name="newsHint">Clique aqui para ver as últimas reuniões e projetos de sua equipe.</string>
+    <string name="schedule">Agenda</string>
+    <string name="scheduleHint">Clique aqui para ir para a agenda da equipe.</string>
+    <string name="user_image">Foto do Usuário</string>
+</resources>
