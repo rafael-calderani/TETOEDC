@@ -33,8 +33,19 @@ public class SplashActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(SplashActivity.this,
-                            NavigationActivity.class);
+                    /*TODO: Autenticar usuário
+                        caso exista e seja válido direcionar para NavigationActivity
+                        se não direcionar par LoginActivity
+                     */
+                    Intent intent = null;
+                    String login = "";
+                    String password = "";
+                    if (AuthUser(login, password)) {
+                        intent = new Intent(SplashActivity.this, NavigationActivity.class);
+                    }
+                    else {
+                        intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    }
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                     SplashActivity.this.finish();
@@ -44,5 +55,9 @@ public class SplashActivity extends AppCompatActivity {
         catch (Throwable e) {
             String message = e.getMessage();
         }
+    }
+
+    private boolean AuthUser(String login, String password) {
+        return false;
     }
 }
