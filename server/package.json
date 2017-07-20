@@ -2,13 +2,22 @@
   "name": "tetoedc-server",
   "version": "1.0.0",
   "description": "Servico para obter as comunidades do TETO e suas respectivas EDCs",
+  "author": "Rafael dos Santos Calderani",
+  "engines": {
+    "node": "6.11.1"
+  },
   "main": "server.js",
   "scripts": {
+	"start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Rafael dos Santos Calderani",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "ejs": "2.5.6",
     "express": "^4.15.3"
   }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafael-calderani/tetoedc-server"
+  },
 }

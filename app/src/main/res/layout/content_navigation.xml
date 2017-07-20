@@ -20,14 +20,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
-            android:text="@string/mainScreenText"
             android:textSize="@dimen/text_size_medium" />
+
         <Button android:id="@+id/btnSchedule"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_margin="@dimen/default_margin"
             android:text="@string/schedule"
             android:hint="@string/scheduleHint"/>
+
+        <Button android:id="@+id/btnTeam"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/default_margin"
+            android:text="@string/my_team"
+            android:hint="@string/my_team_hint"/>
 
         <Button android:id="@+id/btnProjects"
             android:layout_height="wrap_content"

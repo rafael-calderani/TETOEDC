@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/default_margin"
     android:orientation="vertical"
     tools:context="br.com.calderani.rafael.tetoedc.LoginActivity">
 
@@ -71,7 +72,7 @@
             android:id="@+id/cbKeepConnected"
             style="@style/input_default"
             android:textSize="@dimen/text_size_small"
-            android:text="Remember me"
+            android:text="@string/remember_me"
             android:checked="true"
             android:layout_weight="0.62" />
         <TextView

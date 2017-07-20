@@ -2,9 +2,11 @@ package br.com.calderani.rafael.tetoedc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +27,18 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.tvResetPassword)
     TextView tvResetPassword;
 
+    @BindView(R.id.cbKeepConnected)
+    CheckBox cbKeepConnected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        SharedPreferences sp = this.getSharedPreferences(getString(R.string.sharedpreferences_name), Context.MODE_PRIVATE);
+        etUserName.setText(sp.getString("UserName",""));
+        cbKeepConnected.setChecked(sp.getBoolean("KeepConnected", true));
     }
 
     @OnClick(R.id.btSignIn)
@@ -38,6 +47,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (!AuthenticateUser(userName, password)) return;
+
+        SharedPreferences sp = this.getSharedPreferences("TETOEDCInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor spEditor = sp.edit();
+
+        spEditor.putString("UserName", userName);
+        spEditor.putBoolean("KeepConnected", cbKeepConnected.isChecked());
+        spEditor.commit();
+
         Intent i = new Intent(this, NavigationActivity.class);
         startActivity(i);
         LoginActivity.this.finish();
@@ -62,14 +79,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean AuthenticateUser(String userName, String password) {
-        boolean result = false;
-        if (userName == "" || password == "") {
-            Toast.makeText(this, R.string.blank_user_or_password, Toast.LENGTH_SHORT).show();
-            return result;
+        boolean result = true;
+        if (userName.isEmpty()) {
+            Toast.makeText(this,
+                    String.format(getString(R.string.blank_field), getString(R.string.hint_username)),
+                    Toast.LENGTH_SHORT).show();
+            result = false;
+        }
+        if (password.isEmpty()) {
+            Toast.makeText(this, String.format(getString(R.string.blank_field), getString(R.string.hint_password)),
+                    Toast.LENGTH_SHORT).show();
+            result = false;
         }
 
+        //TODO: Authenticate user on the database
+        // Store user information on a singleton? or SharedPreferences
 
-        //TODO: Auth user on the database
         return result;
     }
 
@@ -83,7 +108,11 @@ public class LoginActivity extends AppCompatActivity {
     public void resetPassword() {
         String userName = etUserName.getText().toString();
         if (userName == "") {
-            Toast.makeText(this, R.string.blank_user, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    String.format(
+                            getString(R.string.blank_field),
+                            getString(R.string.hint_username)),
+                    Toast.LENGTH_SHORT).show();
             return;
         }
         Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();

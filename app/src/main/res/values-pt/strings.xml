@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="news">Novidades</string>
+    <string name="news">Notícias</string>
     <string name="projects">Projetos</string>
     <string name="projectsHint">Clique aqui para ir a tela de projetos.</string>
     <string name="action_settings">Configurações</string>
-    <string name="navigation_drawer_open">Abrir menu</string>
-    <string name="navigation_drawer_close">Fechar menu</string>
-    <string name="newsHint">Clique aqui para ver as últimas reuniões e projetos de sua equipe.</string>
+    <string name="navigation_drawer_open">Abrir Navegação</string>
+    <string name="navigation_drawer_close">Fechar Navegação</string>
+    <string name="newsHint">Clique aqui para ver informações sobre próximos eventos o projetos publicados por sua equipe.</string>
     <string name="schedule">Agenda</string>
     <string name="scheduleHint">Clique aqui para ir para a agenda da equipe.</string>
     <string name="user_image">Foto do Usuário</string>
+    <string name="about">Sobre</string>
+    <string name="blank_field">Favor preencher o campo %s antes de realizar esta ação.</string>
+    <string name="community">Comunidade</string>
+    <string name="function">Função</string>
+    <string name="help">Ajuda</string>
+    <string name="hint_password">Senha</string>
+    <string name="hint_username">Usuário</string>
+    <string name="management">Gestão</string>
+    <string name="name">Nome Completo</string>
+    <string name="not_implemented">Desculpe-nos, este método ainda não foi implementado.</string>
+    <string name="password_reset">Esqueceu a senha? Preencha o Usuário e clique aqui para trocar.</string>
+    <string name="phone_number">Telefone</string>
+    <string name="save">Salvar</string>
+    <string name="service_error_message">Erro ao iniciar o serviço. Detalhes: %s</string>
+    <string name="sign_in">Logar</string>
+    <string name="sign_up">Inscrever-se</string>
+    <string name="welcome_text" formatted="false">Bem vindo %s, você pertence a equipe %s e sua próxima reunião está agendada para %s.</string>
+    <string name="contact_us">Fale Conosco</string>
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="remember_me">Lembrar do usuário</string>
+    <string name="my_team">Minha Equipe</string>
+    <string name="my_team_hint">Lista todos os membros de sua equipe e suas informações de contato.</string>
 </resources>

@@ -6,12 +6,9 @@ package br.com.calderani.rafael.tetoedc.api;
 
 public class ApiUtils {
 
-    //TODO: Set correct Service URL
-    public static final String BASE_URL = "http://10.3.1.12:3000";
+    public static final String BASE_URL = "http://tetoedc.herokuapp.com";
 
-    /*
-    public static MetroAPI getMetroAPI() {
-        return RetrofitClient.getClient(BASE_URL).create(MetroAPI.class);
+    public static CommunityAPI getComunidadeAPI() {
+        return RetrofitClient.getClient(BASE_URL).create(CommunityAPI.class);
     }
-    */
 }
