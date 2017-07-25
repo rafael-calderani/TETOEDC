@@ -10,9 +10,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.common.LogUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +61,7 @@ public class NewUserActivity extends AppCompatActivity {
         // Carregar ddlCommunity usando o serviço web via json
         communityNames = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, communityNames);
-        mService = ApiUtils.getComunidadeAPI();
+        mService = ApiUtils.getCommunitiesAPI();
         //TODO: Show LoadingActivity
         mService.getCommunities()
             .subscribeOn(Schedulers.io())

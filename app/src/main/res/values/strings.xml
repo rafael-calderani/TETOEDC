@@ -45,4 +45,7 @@
     <string name="projectsHint">Click here to navigate to the Projects screen.</string>
     <string name="news">News</string>
     <string name="newsHint">Click here to view latest info about meetings or projects published by your team.</string>
+    <string name="gpsPermissionRequest">This will require permissions to use your phone\'s GPS to function correctly ok?</string>
+    <string name="title_activity_community_maps">TETO - EDC</string>
+    <string name="communities">Communities</string>
 </resources>

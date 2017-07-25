@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_margin="@dimen/default_margin"
+    android:orientation="vertical"
     tools:context="br.com.calderani.rafael.tetoedc.NavigationActivity"
     tools:showIn="@layout/app_bar_navigation">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="@dimen/default_margin">
         <TextView
             android:id="@+id/tvWelcome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
+            style="@style/controls_default"
+            android:layout_marginTop="@dimen/custom_margin"
             android:textSize="@dimen/text_size_medium" />
 
-        <Button android:id="@+id/btnSchedule"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/default_margin"
+        <Button android:id="@+id/btSchedule"
+            android:background="@drawable/button_default"
+            style="@style/button_default"
             android:text="@string/schedule"
             android:hint="@string/scheduleHint"/>
 
-        <Button android:id="@+id/btnTeam"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/default_margin"
+        <Button android:id="@+id/btTeam"
+            android:background="@drawable/button_default"
+            style="@style/button_default"
             android:text="@string/my_team"
             android:hint="@string/my_team_hint"/>
 
-        <Button android:id="@+id/btnProjects"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/default_margin"
+        <Button android:id="@+id/btProjects"
+            android:background="@drawable/button_default"
+            style="@style/button_default"
             android:text="@string/projects"
             android:hint="@string/projectsHint"/>
 
-        <Button android:id="@+id/btnContent"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_margin="@dimen/default_margin"
+        <Button android:id="@+id/btNews"
+            android:background="@drawable/button_default"
+            style="@style/button_default"
             android:text="@string/news"
             android:hint="@string/newsHint"/>
-    </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+        <Button android:id="@+id/btCommunities"
+            android:background="@drawable/button_default"
+            style="@style/button_default"
+            android:text="@string/communities"
+            android:hint="@string/communities"/>
+</LinearLayout>

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
         <EditText
             android:id="@+id/etUserName"
-            style="@style/input_default"
+            style="@style/controls_default"
             android:hint="@string/hint_username"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content">
         <EditText
             android:id="@+id/etPassword"
-            style="@style/input_default"
+            style="@style/controls_default"
             android:hint="@string/hint_password"
             android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
@@ -31,13 +31,15 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/btSignUp"
-            style="@style/input_default"
+            android:background="@drawable/button_default"
+            style="@style/button_login"
             android:layout_weight="0.5"
             android:text="@string/sign_up"/>
 
         <Button
             android:id="@+id/btSignIn"
-            style="@style/input_default"
+            android:background="@drawable/button_green"
+            style="@style/button_login"
             android:layout_weight="0.5"
             android:text="@string/sign_in"/>
     </LinearLayout>
@@ -50,17 +52,20 @@
             android:id="@+id/ivSignInFacebook"
             style="@style/input_logo"
             android:layout_weight="0.33"
-            android:src="@drawable/ic_facebook_signin"/>
+            android:src="@drawable/ic_facebook_signin"
+            android:contentDescription="Facebook Sign In"/>
         <ImageView
             android:id="@+id/ivSignInGoogle"
             style="@style/input_logo"
             android:layout_weight="0.33"
-            android:src="@drawable/ic_google_signin" />
+            android:src="@drawable/ic_google_signin"
+            android:contentDescription="Google Sign In" />
         <ImageView
             android:id="@+id/ivSignInTwitter"
             style="@style/input_logo"
             android:layout_weight="0.34"
-            android:src="@drawable/ic_twitter_signin" />
+            android:src="@drawable/ic_twitter_signin"
+            android:contentDescription="Twitter Sign In"/>
     </LinearLayout>
 
 
@@ -70,14 +75,14 @@
         android:orientation="horizontal">
         <CheckBox
             android:id="@+id/cbKeepConnected"
-            style="@style/input_default"
+            style="@style/controls_default"
             android:textSize="@dimen/text_size_small"
             android:text="@string/remember_me"
             android:checked="true"
             android:layout_weight="0.62" />
         <TextView
             android:id="@+id/tvResetPassword"
-            style="@style/input_default"
+            style="@style/controls_default"
             android:gravity="center"
             android:textSize="@dimen/text_size_small"
             android:text="@string/password_reset"

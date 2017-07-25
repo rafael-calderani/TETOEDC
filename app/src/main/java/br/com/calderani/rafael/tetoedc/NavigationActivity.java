@@ -3,8 +3,8 @@ package br.com.calderani.rafael.tetoedc;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -17,15 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.facebook.stetho.Stetho;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,14 +42,15 @@ public class NavigationActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddProject);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "This will take you to the New Project Activity.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //TODO: Check how to work with this to make actions Snackbar.make()
+        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddProject);
+        //fab.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        Snackbar.make(view, "This will take you to the New Project Activity.", Snackbar.LENGTH_LONG)
+        //                .setAction("Action", null).show();
+        //    }
+        //});
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -126,5 +126,42 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @OnClick(R.id.btSchedule)
+    public void scheduleClick() {
+        //String url = "https://docs.google.com/spreadsheets/d/1yFKZW6JB4ovbC3yIWmbvXv8OMq0Q5avjSznn-xkq0SM/edit#gid=0";
+        //navigateToUrl(url);
+    }
+
+    @OnClick(R.id.btTeam)
+    public void teamClick() {
+        //String url = "https://docs.google.com/spreadsheets/d/14C30CS9DRHU-K2PpjK1P1mN27k39gYO547etJtKPDrI/edit#gid=0";
+        //navigateToUrl(url);
+    }
+
+    @OnClick(R.id.btProjects)
+    public void projectsClick() {
+        //String url = "https://docs.google.com/spreadsheets/d/1cxO3vSNVOE8W7xWfZiHSmSDMIid4_Dp1hll1Lnk61Vg/edit#gid=1511351235";
+        //navigateToUrl(url);
+    }
+
+    @OnClick(R.id.btNews)
+    public void newsClick() {
+        //String url = "";
+        //navigateToUrl(url);
+        Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.btCommunities)
+    public void communitiesClick() {
+        Intent i = new Intent(this, CommunitiesActivity.class);
+        startActivity(i);
+    }
+
+    private void navigateToUrl (String url) {
+        Uri uriUrl = Uri.parse(url);
+        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+        startActivity(launchBrowser);
     }
 }

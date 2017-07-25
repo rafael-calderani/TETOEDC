@@ -27,7 +27,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
-    <style name="input_default">
+    <style name="controls_default">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/default_padding</item>
@@ -36,5 +36,35 @@
         <item name="android:layout_width">65dp</item>
         <item name="android:layout_height">65dp</item>
         <item name="android:scaleHeight">fit</item>
+    </style>
+    <style name="button_login" parent="controls_default">
+        <item name="android:layout_height">44dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#222222</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">4</item>
+    </style>
+    <style name="button_default" parent="controls_default">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">15dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#222222</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">4</item>
+    </style>
+    <style name="recyclerViewerText" parent="controls_default">
+        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
     </style>
 </resources>

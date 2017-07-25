@@ -6,9 +6,9 @@ package br.com.calderani.rafael.tetoedc.api;
 
 public class ApiUtils {
 
-    public static final String BASE_URL = "http://tetoedc.herokuapp.com";
+    private static final String BASE_URL = "http://tetoedc.herokuapp.com";
 
-    public static CommunityAPI getComunidadeAPI() {
+    public static CommunityAPI getCommunitiesAPI() {
         return RetrofitClient.getClient(BASE_URL).create(CommunityAPI.class);
     }
 }

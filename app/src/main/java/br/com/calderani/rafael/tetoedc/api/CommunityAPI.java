@@ -17,7 +17,7 @@ public interface CommunityAPI {
     @GET("/comunidades")
     Observable<List<Community>> getCommunities();
 
-    @GET("/comunidades/{comunidade}/equipeEDC")
-    Observable<List<User>> getEquipeFixa(@Path("comunidade") String comunidade);
+    @GET("/comunidades/{comunidade}/details")
+    Observable<List<Community>> getCommunityDetails(@Path("comunidade") String comunidade);
 
 }

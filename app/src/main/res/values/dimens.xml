@@ -9,4 +9,6 @@
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="logo_height">420dp</dimen>
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="custom_margin">50dp</dimen>
 </resources>

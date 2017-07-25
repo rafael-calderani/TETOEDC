@@ -5,4 +5,5 @@
     <color name="colorAccent">#c7000770</color>
     <color name="roundButton">#3b4181</color>
     <color name="bg_splash">#000000</color>
+    <color name="dark_gray">#a9a9a9</color>
 </resources>
