@@ -130,20 +130,20 @@ public class NavigationActivity extends AppCompatActivity
 
     @OnClick(R.id.btSchedule)
     public void scheduleClick() {
-        //String url = "https://docs.google.com/spreadsheets/d/1yFKZW6JB4ovbC3yIWmbvXv8OMq0Q5avjSznn-xkq0SM/edit#gid=0";
-        //navigateToUrl(url);
+        Intent i = new Intent(this, ScheduleActivity.class);
+        startActivity(i);
     }
 
     @OnClick(R.id.btTeam)
     public void teamClick() {
-        //String url = "https://docs.google.com/spreadsheets/d/14C30CS9DRHU-K2PpjK1P1mN27k39gYO547etJtKPDrI/edit#gid=0";
-        //navigateToUrl(url);
+        String url = "https://docs.google.com/spreadsheets/d/14C30CS9DRHU-K2PpjK1P1mN27k39gYO547etJtKPDrI/edit#gid=0";
+        navigateToUrl(url);
     }
 
     @OnClick(R.id.btProjects)
     public void projectsClick() {
-        //String url = "https://docs.google.com/spreadsheets/d/1cxO3vSNVOE8W7xWfZiHSmSDMIid4_Dp1hll1Lnk61Vg/edit#gid=1511351235";
-        //navigateToUrl(url);
+        String url = "https://docs.google.com/spreadsheets/d/1cxO3vSNVOE8W7xWfZiHSmSDMIid4_Dp1hll1Lnk61Vg/edit#gid=1511351235";
+        navigateToUrl(url);
     }
 
     @OnClick(R.id.btNews)

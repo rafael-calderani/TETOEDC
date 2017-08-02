@@ -53,26 +53,28 @@
             style="@style/input_logo"
             android:layout_weight="0.33"
             android:src="@drawable/ic_facebook_signin"
-            android:contentDescription="Facebook Sign In"/>
+            android:contentDescription="Facebook Sign In" />
+
         <ImageView
             android:id="@+id/ivSignInGoogle"
             style="@style/input_logo"
             android:layout_weight="0.33"
             android:src="@drawable/ic_google_signin"
             android:contentDescription="Google Sign In" />
+
         <ImageView
             android:id="@+id/ivSignInTwitter"
             style="@style/input_logo"
             android:layout_weight="0.34"
             android:src="@drawable/ic_twitter_signin"
             android:contentDescription="Twitter Sign In"/>
+
     </LinearLayout>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <CheckBox
             android:id="@+id/cbKeepConnected"
             style="@style/controls_default"
@@ -80,6 +82,7 @@
             android:text="@string/remember_me"
             android:checked="true"
             android:layout_weight="0.62" />
+
         <TextView
             android:id="@+id/tvResetPassword"
             style="@style/controls_default"

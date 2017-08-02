@@ -28,13 +28,13 @@ import rx.schedulers.Schedulers;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
+import static br.com.calderani.rafael.tetoedc.api.PermissionRequestCodes.GPS_FINE_PERMISSION;
 
 public class CommunitiesActivity extends AppCompatActivity {
     @BindView(R.id.rvCommunities)
     RecyclerView rvCommunities;
     private CommunitiesAdapter cAdapter;
     private CommunityAPI cService;
-    private static final int GPS_PERMISSION = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class CommunitiesActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                             ActivityCompat.requestPermissions(CommunitiesActivity.this,
                                     new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION},
-                                    GPS_PERMISSION);
+                                    GPS_FINE_PERMISSION);
 
                         }
                         iniciarMapa(community);
@@ -117,7 +117,7 @@ public class CommunitiesActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case GPS_PERMISSION: {
+            case GPS_FINE_PERMISSION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
                     // Sucesso!

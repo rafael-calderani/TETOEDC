@@ -16,30 +16,25 @@
         <Button android:id="@+id/btSchedule"
             android:background="@drawable/button_default"
             style="@style/button_default"
-            android:text="@string/schedule"
-            android:hint="@string/scheduleHint"/>
+            android:text="@string/schedule" />
 
         <Button android:id="@+id/btTeam"
             android:background="@drawable/button_default"
             style="@style/button_default"
-            android:text="@string/my_team"
-            android:hint="@string/my_team_hint"/>
+            android:text="@string/my_team" />
 
         <Button android:id="@+id/btProjects"
             android:background="@drawable/button_default"
             style="@style/button_default"
-            android:text="@string/projects"
-            android:hint="@string/projectsHint"/>
+            android:text="@string/projects" />
 
         <Button android:id="@+id/btNews"
             android:background="@drawable/button_default"
             style="@style/button_default"
-            android:text="@string/news"
-            android:hint="@string/newsHint"/>
+            android:text="@string/news" />
 
         <Button android:id="@+id/btCommunities"
             android:background="@drawable/button_default"
             style="@style/button_default"
-            android:text="@string/communities"
-            android:hint="@string/communities"/>
+            android:text="@string/communities"/>
 </LinearLayout>

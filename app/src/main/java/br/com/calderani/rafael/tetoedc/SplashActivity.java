@@ -1,12 +1,16 @@
 package br.com.calderani.rafael.tetoedc;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import com.facebook.AccessToken;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 4000;
@@ -33,14 +37,8 @@ public class SplashActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    /*TODO: Autenticar usuário
-                        caso exista e seja válido direcionar para NavigationActivity
-                        se não direcionar par LoginActivity
-                     */
                     Intent intent = null;
-                    String login = "";
-                    String password = "";
-                    if (AuthUser(login, password)) {
+                    if (AuthUser()) {
                         intent = new Intent(SplashActivity.this, NavigationActivity.class);
                     }
                     else {
@@ -57,7 +55,24 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private boolean AuthUser(String login, String password) {
-        return false;
+    /**
+     * TODO: Autenticar usuário
+     * caso exista e seja válido direcionar para NavigationActivity
+     * se não direcionar par LoginActivity
+     */
+    private boolean AuthUser() {
+        Boolean result = false;
+
+        /** Verify Facebook Auth */
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        result = (accessToken != null && !accessToken.isExpired()) || result;
+
+        /** Verify Firebase Auth */
+        //TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        //String currentDeviceId = telephonyManager.getDeviceId();
+        //String currentDeviceNumber = telephonyManager.getLine1Number();
+        //result = (accessToken != null && !accessToken.isExpired()) || result;
+
+        return result;
     }
 }

@@ -2,13 +2,10 @@
 <resources>
     <string name="news">Notícias</string>
     <string name="projects">Projetos</string>
-    <string name="projectsHint">Clique aqui para ir a tela de projetos.</string>
     <string name="action_settings">Configurações</string>
     <string name="navigation_drawer_open">Abrir Navegação</string>
     <string name="navigation_drawer_close">Fechar Navegação</string>
-    <string name="newsHint">Clique aqui para ver informações sobre próximos eventos o projetos publicados por sua equipe.</string>
     <string name="schedule">Agenda</string>
-    <string name="scheduleHint">Clique aqui para ir para a agenda da equipe.</string>
     <string name="user_image">Foto do Usuário</string>
     <string name="about">Sobre</string>
     <string name="blank_field">Favor preencher o campo %s antes de realizar esta ação.</string>
@@ -31,5 +28,4 @@
     <string name="edit_profile">Editar Perfil</string>
     <string name="remember_me">Lembrar do usuário</string>
     <string name="my_team">Minha Equipe</string>
-    <string name="my_team_hint">Lista todos os membros de sua equipe e suas informações de contato.</string>
 </resources>

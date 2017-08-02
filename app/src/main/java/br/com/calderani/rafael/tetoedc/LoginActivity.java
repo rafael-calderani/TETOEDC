@@ -1,15 +1,42 @@
 package br.com.calderani.rafael.tetoedc;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,6 +44,7 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SIGNUP = 10001;
+    CallbackManager callbackManager;
 
     @BindView(R.id.etUserName)
     EditText etUserName;
@@ -30,11 +58,61 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.cbKeepConnected)
     CheckBox cbKeepConnected;
 
+    @BindView(R.id.ivSignInFacebook)
+    ImageView ivSignInFacebook;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance()
+            .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    GraphRequest fbRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                            new GraphRequest.GraphJSONObjectCallback() {
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response) {
+                                    try{
+                                        if (object != null && !object.isNull("email")) {
+                                            //TODO: Insert or verify user on database?
+                                            etUserName.setText(object.getString("email"));
+                                            etPassword.setText("FBUser**");
+                                            signIn();
+                                        }
+                                    }
+                                    catch (JSONException e){
+                                        String a = e.getMessage();
+                                    }
+                                }
+                            });
+                    Bundle parameters = new Bundle();
+                    parameters.putString("fields", "id,name,email,gender");
+                    fbRequest.setParameters(parameters);
+                    fbRequest.executeAsync();
+                }
+
+                @Override
+                public void onCancel() { /* App code */ }
+
+                @Override
+                public void onError(FacebookException exc) {
+                    Toast.makeText(null,
+                            String.format(getString(R.string.service_error_message), exc.getMessage()),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        ivSignInFacebook.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Activity a = (Activity) v.getContext();
+                LoginManager.getInstance().logInWithReadPermissions(a, Arrays.asList("email"));
+            }
+        });
 
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.sharedpreferences_name), Context.MODE_PRIVATE);
         etUserName.setText(sp.getString("UserName",""));
@@ -58,12 +136,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, NavigationActivity.class);
         startActivity(i);
         LoginActivity.this.finish();
-    }
-
-    @OnClick(R.id.ivSignInFacebook)
-    public void signInFacebook() {
-        Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-        // TODO: Facebook Auth
     }
 
     @OnClick(R.id.ivSignInGoogle)
@@ -117,11 +189,13 @@ public class LoginActivity extends AppCompatActivity {
         }
         Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
         //TODO: check if user exists and send an e-mail with a new random 6 digit password
+        //TODO: request user permission to send e-mail?
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_SIGNUP) {
             switch (resultCode) {
                 case RESULT_OK:

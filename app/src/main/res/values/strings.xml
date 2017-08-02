@@ -2,6 +2,9 @@
     <!-- Common -->
     <string name="app_name" translatable="false">TETO - EDC</string>
     <string name="sharedpreferences_name" translatable="false">TETOEDCInfo</string>
+    <string name="facebook_app_id">335573473547858</string>
+    <string name="fb_login_protocol_scheme">fb335573473547858</string>
+
 
     <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -38,13 +41,11 @@
     <string name="welcome_text" formatted="false">Welcome %s, you belong to %s\'s team and your next meeting will be on %s.</string>
     <string name="remember_me">Remember me</string>
     <string name="my_team">My Team</string>
-    <string name="my_team_hint">List all your team members and their contact details.</string>
     <string name="schedule">Schedule</string>
-    <string name="scheduleHint">Click here to navigate to the Schedule screen.</string>
     <string name="projects">Projects</string>
-    <string name="projectsHint">Click here to navigate to the Projects screen.</string>
     <string name="news">News</string>
-    <string name="newsHint">Click here to view latest info about meetings or projects published by your team.</string>
+
+    <!-- Communities Activity -->
     <string name="gpsPermissionRequest">This will require permissions to use your phone\'s GPS to function correctly ok?</string>
     <string name="title_activity_community_maps">TETO - EDC</string>
     <string name="communities">Communities</string>

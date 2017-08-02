@@ -33,9 +33,11 @@
         <item name="android:padding">@dimen/default_padding</item>
     </style>
     <style name="input_logo">
-        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">65dp</item>
-        <item name="android:scaleHeight">fit</item>
+    </style>
+    <style name="signInFacebook" parent="input_logo">
+        <item name="android:background">@drawable/ic_facebook_signin</item>
     </style>
     <style name="button_login" parent="controls_default">
         <item name="android:layout_height">44dp</item>
@@ -53,7 +55,7 @@
         <item name="android:layout_height">56dp</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_margin">15dp</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">#222222</item>
