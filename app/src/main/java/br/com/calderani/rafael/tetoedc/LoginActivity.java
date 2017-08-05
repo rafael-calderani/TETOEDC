@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -30,6 +33,13 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +55,8 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SIGNUP = 10001;
     CallbackManager callbackManager;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
     @BindView(R.id.etUserName)
     EditText etUserName;
@@ -67,11 +79,29 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        /*
+        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    //Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+        */
+
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance()
             .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
+                    /*
                     GraphRequest fbRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                             new GraphRequest.GraphJSONObjectCallback() {
                                 @Override
@@ -79,12 +109,12 @@ public class LoginActivity extends AppCompatActivity {
                                     try{
                                         if (object != null && !object.isNull("email")) {
                                             //TODO: Insert or verify user on database?
-                                            etUserName.setText(object.getString("email"));
-                                            etPassword.setText("FBUser**");
+                                            //etUserName.setText(object.getString("email"));
+                                            //etPassword.setText("FBUser**");
                                             signIn();
                                         }
                                     }
-                                    catch (JSONException e){
+                                    catch (FacebookException e){
                                         String a = e.getMessage();
                                     }
                                 }
@@ -93,6 +123,8 @@ public class LoginActivity extends AppCompatActivity {
                     parameters.putString("fields", "id,name,email,gender");
                     fbRequest.setParameters(parameters);
                     fbRequest.executeAsync();
+                    */
+                    handleFacebookAccessToken(loginResult.getAccessToken());
                 }
 
                 @Override
@@ -114,7 +146,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sp = this.getSharedPreferences(getString(R.string.sharedpreferences_name), Context.MODE_PRIVATE);
+        SharedPreferences sp = this.getSharedPreferences(
+                getString(R.string.sharedpreferences_name),
+                Context.MODE_PRIVATE);
         etUserName.setText(sp.getString("UserName",""));
         cbKeepConnected.setChecked(sp.getBoolean("KeepConnected", true));
     }
@@ -132,6 +166,10 @@ public class LoginActivity extends AppCompatActivity {
         spEditor.putString("UserName", userName);
         spEditor.putBoolean("KeepConnected", cbKeepConnected.isChecked());
         spEditor.commit();
+
+        //Crashlytics.setUserIdentifier(etUserName.getText().toString());
+        //Crashlytics.setUserEmail(etUserName.getText().toString());
+        //Answers.getInstance().logLogin(new LoginEvent());
 
         Intent i = new Intent(this, NavigationActivity.class);
         startActivity(i);
@@ -166,6 +204,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //TODO: Authenticate user on the database
         // Store user information on a singleton? or SharedPreferences
+        //firebaseAuth = FirebaseAuth.getInstance();
+        //https://api-project-834710560139.firebaseapp.com/__/auth/handler
 
         return result;
     }
@@ -192,6 +232,30 @@ public class LoginActivity extends AppCompatActivity {
         //TODO: request user permission to send e-mail?
     }
 
+    private void handleFacebookAccessToken(AccessToken token) {
+        //Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> loginTask) {
+                        if (loginTask.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            //Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+                    }
+                });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -209,4 +273,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+/*
+    @Override
+    public void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (firebaseAuthListener != null) {
+            firebaseAuth.removeAuthStateListener(firebaseAuthListener);
+        }
+    }
+    */
 }

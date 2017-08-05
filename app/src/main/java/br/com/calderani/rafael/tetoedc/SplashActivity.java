@@ -3,6 +3,7 @@ package br.com.calderani.rafael.tetoedc;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -11,9 +12,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.facebook.AccessToken;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 4000;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    private Boolean isUserAuthenticated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,23 @@ public class SplashActivity extends AppCompatActivity {
         result = (accessToken != null && !accessToken.isExpired()) || result;
 
         /** Verify Firebase Auth */
+        /*
+        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    isUserAuthenticated = true;
+                    // User is signed in
+                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    //Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };*/
+
         //TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         //String currentDeviceId = telephonyManager.getDeviceId();
         //String currentDeviceNumber = telephonyManager.getLine1Number();

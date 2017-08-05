@@ -19,15 +19,21 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.fabric.sdk.android.Fabric;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.tvWelcome)
     TextView tvWelcome;
@@ -39,6 +45,9 @@ public class NavigationActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         ButterKnife.bind(this);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        FirebaseMessaging.getInstance().subscribeToTopic("noticiasTETO");
 
         setSupportActionBar(toolbar);
 
@@ -63,6 +72,7 @@ public class NavigationActivity extends AppCompatActivity
 
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.sharedpreferences_name), Context.MODE_PRIVATE);
 
+
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
         String date = df.format(c.getTime());
@@ -79,6 +89,9 @@ public class NavigationActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -132,18 +145,30 @@ public class NavigationActivity extends AppCompatActivity
     public void scheduleClick() {
         Intent i = new Intent(this, ScheduleActivity.class);
         startActivity(i);
+
+        Bundle b = new Bundle();
+        b.putString("Click", "Schedule");
+        mFirebaseAnalytics.logEvent("Schedule Activity Start", b);
     }
 
     @OnClick(R.id.btTeam)
     public void teamClick() {
         String url = "https://docs.google.com/spreadsheets/d/14C30CS9DRHU-K2PpjK1P1mN27k39gYO547etJtKPDrI/edit#gid=0";
         navigateToUrl(url);
+
+        Bundle b = new Bundle();
+        b.putString("Click", "Team");
+        mFirebaseAnalytics.logEvent("Team Link Activated", b);
     }
 
     @OnClick(R.id.btProjects)
     public void projectsClick() {
         String url = "https://docs.google.com/spreadsheets/d/1cxO3vSNVOE8W7xWfZiHSmSDMIid4_Dp1hll1Lnk61Vg/edit#gid=1511351235";
         navigateToUrl(url);
+
+        Bundle b = new Bundle();
+        b.putString("Click", "Projects");
+        mFirebaseAnalytics.logEvent("Projects Link Activated", b);
     }
 
     @OnClick(R.id.btNews)
@@ -151,12 +176,22 @@ public class NavigationActivity extends AppCompatActivity
         //String url = "";
         //navigateToUrl(url);
         Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+
+        Bundle b = new Bundle();
+        b.putString("Click", "News");
+        mFirebaseAnalytics.logEvent("News Link Activated", b);
+
+        throw new RuntimeException(getString(R.string.not_implemented));
     }
 
     @OnClick(R.id.btCommunities)
     public void communitiesClick() {
         Intent i = new Intent(this, CommunitiesActivity.class);
         startActivity(i);
+
+        Bundle b = new Bundle();
+        b.putString("Click", "Communities");
+        mFirebaseAnalytics.logEvent("Communities Activity Start", b);
     }
 
     private void navigateToUrl (String url) {

@@ -10,6 +10,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,17 +101,34 @@ public class NewUserActivity extends AppCompatActivity {
         String login = etUserName.getText().toString();
         String password = etPassword.getText().toString();
         String name = etName.getText().toString();
-        String email = etEmail.getText().toString();
+        final String email = etEmail.getText().toString();
         String community = ddlCommunity.getSelectedItem().toString();
         String function = ddlFunction.getSelectedItem().toString();
         String phone = etPhone.getText().toString();
 
         //TODO: Check if user exists and Add him to the database
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> loginTask) {
+                        //Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("USERNAME", login);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+                        if (!loginTask.isSuccessful()) {
+                            Toast.makeText(NewUserActivity.this, "Bad things happened.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            String login = etUserName.getText().toString();
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("USERNAME", login);
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
+                        }
+
+                        // ...
+                    }
+                });
     }
 
     @Override
