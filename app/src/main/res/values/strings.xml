@@ -2,14 +2,19 @@
     <!-- Common -->
     <string name="app_name" translatable="false">TETO - EDC</string>
     <string name="sharedpreferences_name" translatable="false">TETOEDCInfo</string>
-    <string name="facebook_app_id">335573473547858</string>
-    <string name="fb_login_protocol_scheme">fb335573473547858</string>
-
+    <string name="facebook_app_id" translatable="false">335573473547858</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb335573473547858</string>
+    <string name="service_error_message">Service Error. Details: %s</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="not_implemented">Sorry. Method not implemented yet.</string>
+    <string name="blank_field">You need to fill the %s before clicking here.</string>
+    <string name="logout_confirm">Do you really want to logout?</string>
 
     <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="nav_logout">Logout</string>
     <string name="sampleEmail" translatable="false">edc@teto.org.br</string>
     <string name="user_image">User Image</string>
     <string name="management">Management</string>
@@ -20,33 +25,44 @@
     <string name="edit_profile">Edit Profile</string>
 
     <!-- Login Activity -->
-    <string name="hint_username">User Name</string>
+    <string name="email" translatable="false">E-mail</string>
     <string name="hint_password">Password</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="password_reset">Forgot your password? Fill your login and click here to reset.</string>
-    <string name="blank_field">You need to fill the %s before clicking here.</string>
-    <string name="not_implemented">Sorry. Method not implemented yet.</string>
-    <string name="email" translatable="false">E-mail</string>
+    <string name="user_auth_success">User authenticated.</string>
+    <string name="user_invalid">Invalid user, please sign up if you want to use the app.</string>
+    <string name="user_auth_failed">Authentication failed.</string>
+
+    <!-- User Management Activity -->
     <string name="name">Full Name</string>
+    <string name="communityName">Community</string>
     <string name="function">Function</string>
     <string name="phone_number">Phone Number</string>
     <string name="save">Save</string>
-    <string name="community">Community</string>
-
-    <!-- New User Activity -->
-    <string name="service_error_message">Service Error. Details: %s</string>
+    <string name="user_deletion">User deleted sucessfully, you will be redirected to the login screen.</string>
+    <string name="user_deletion_error">Error while deleting user.</string>
+    <string name="delete">Delete</string>
+    <string name="user_deletion_confirm">Do you really want to erase your user?</string>
+    <string name="user_creation_continue">Almost done, just fill in your Function, Community Name and Phone Number and we are all set!</string>
+    <string name="user_creation_error">There was an error when trying to add/update this User.</string>
+    <string name="user_creation_success">Amazing! Welcome to our awesome group!</string>
+    <string name="loading_communities">Loading communities...</string>
 
     <!-- Navigation Activity -->
     <string name="welcome_text" formatted="false">Welcome %s, you belong to %s\'s team and your next meeting will be on %s.</string>
     <string name="remember_me">Remember me</string>
     <string name="my_team">My Team</string>
+    <string name="communities">Communities</string>
     <string name="schedule">Schedule</string>
     <string name="projects">Projects</string>
     <string name="news">News</string>
 
     <!-- Communities Activity -->
     <string name="gpsPermissionRequest">This will require permissions to use your phone\'s GPS to function correctly ok?</string>
-    <string name="title_activity_community_maps">TETO - EDC</string>
-    <string name="communities">Communities</string>
+    <string name="existing_user">User already registered, if you forgot your password click on the link \'Forgot your password?\' to reset it.</string>
+
+    <!-- Contact Activity -->
+    <string name="subject">Subject</string>
+    <string name="send">Send</string>
 </resources>

@@ -1,0 +1,10 @@
+CREATE TABLE user (
+    id INTEGER PRIMARY KEY NOT NULL,
+    email varchar ( 100 ) NOT NULL,
+    password varchar ( 20 )  NOT NULL,
+    name varchar ( 255 )  NULL,
+    function varchar ( 20 ) NOT NULL,
+    communityName varchar ( 50 ) NOT NULL,
+    phone varchar ( 20 ) NULL,
+    unique(email) ON CONFLICT replace
+);

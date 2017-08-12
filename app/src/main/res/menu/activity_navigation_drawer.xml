@@ -12,9 +12,9 @@
                 android:icon="@android:drawable/ic_menu_agenda"
                 android:title="@string/schedule" />
             <item
-                android:id="@+id/nav_settings"
+                android:id="@+id/nav_logout"
                 android:icon="@android:drawable/ic_menu_manage"
-                android:title="@string/action_settings" />
+                android:title="@string/nav_logout" />
         </menu>
     </item>
     <item android:title="@string/about">

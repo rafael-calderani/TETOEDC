@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="function_array">
-        <item>Voluntári@ EDC</item>
-        <item>Voluntári@ Educação</item>
-        <item>Voluntári@ Coordenação</item>
-        <item>Voluntári@ Comunicação</item>
-        <item>Voluntári@ Jurídic@</item>
-        <item>Outr@</item>
+        <item>Voluntári@ EDC</item>         <!-- 1 -->
+        <item>Voluntári@ Educação</item>    <!-- 2 -->
+        <item>Voluntári@ Coordenação</item> <!-- 3 -->
+        <item>Voluntári@ Comunicação</item> <!-- 4 -->
+        <item>Voluntári@ Jurídic@</item>    <!-- 5 -->
+        <item>Outr@</item>                  <!-- 6 -->
     </string-array>
 </resources>

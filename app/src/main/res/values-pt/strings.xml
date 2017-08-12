@@ -2,18 +2,17 @@
 <resources>
     <string name="news">Notícias</string>
     <string name="projects">Projetos</string>
-    <string name="action_settings">Configurações</string>
+    <string name="nav_logout">Configurações</string>
     <string name="navigation_drawer_open">Abrir Navegação</string>
     <string name="navigation_drawer_close">Fechar Navegação</string>
     <string name="schedule">Agenda</string>
     <string name="user_image">Foto do Usuário</string>
     <string name="about">Sobre</string>
     <string name="blank_field">Favor preencher o campo %s antes de realizar esta ação.</string>
-    <string name="community">Comunidade</string>
+    <string name="communityName">Comunidade</string>
     <string name="function">Função</string>
     <string name="help">Ajuda</string>
     <string name="hint_password">Senha</string>
-    <string name="hint_username">Usuário</string>
     <string name="management">Gestão</string>
     <string name="name">Nome Completo</string>
     <string name="not_implemented">Desculpe-nos, este método ainda não foi implementado.</string>
@@ -28,4 +27,23 @@
     <string name="edit_profile">Editar Perfil</string>
     <string name="remember_me">Lembrar do usuário</string>
     <string name="my_team">Minha Equipe</string>
+    <string name="communities">Comunidades</string>
+    <string name="delete">Excluir</string>
+    <string name="existing_user">Usuário cadastrado, se você esqueceu sua senha, clique no link \'Esqueceu a senha?\'.</string>
+    <string name="gpsPermissionRequest">Esta ação necessita de acesso ao seu GPS para funcionar corretamente ok?</string>
+    <string name="no">Não</string>
+    <string name="send">Enviar</string>
+    <string name="subject">Assunto</string>
+    <string name="user_deletion">Usuário excluído com sucesso, você será redirecionado a tela de login.</string>
+    <string name="user_deletion_confirm">Tem certeza que deseja excluir seu usuário?</string>
+    <string name="user_deletion_error">Erro ao excluir o usuário.</string>
+    <string name="yes">Sim</string>
+    <string name="logout_confirm">Você tem certeza que deseja sair?</string>
+    <string name="user_auth_failed">Houve um problema ao autenticar seu usuário. Desculpe-nos.</string>
+    <string name="user_auth_success">Usuário autenticado com sucesso.</string>
+    <string name="user_creation_continue">Está quase acabando, preencha sua Função, Comunidade e Celular e pronto!</string>
+    <string name="user_creation_error">Houve um erro ao criar/atualizar seu usuário.</string>
+    <string name="user_creation_success">Seja bem vindo ao nosso incrível time!</string>
+    <string name="user_invalid">Usuário inválido, favor se cadastrar para usar o app.</string>
+    <string name="loading_communities">Carregando as comunidades...</string>
 </resources>

@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "834710560139",
+    "firebase_url": "https://api-project-834710560139.firebaseio.com",
+    "project_id": "api-project-834710560139",
+    "storage_bucket": "api-project-834710560139.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834710560139:android:ca66157fa94c56ab",
+        "android_client_info": {
+          "package_name": "br.com.calderani.rafael.tetoedc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "834710560139-ced73nnbppttrtgljp6c1vmp38q0lb31.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.calderani.rafael.tetoedc",
+            "certificate_hash": "42d684230be255842568919cd024d46d891e1b99"
+          }
+        },
+        {
+          "client_id": "834710560139-3fge8setu99okigrsbmbcpi1dst7qonk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.calderani.rafael.tetoedc",
+            "certificate_hash": "bb0f4dcfab22ee6dc6b1f9fc847dbdfffaaec55c"
+          }
+        },
+        {
+          "client_id": "834710560139-lch3tbfrpd46hmdfebr4n4obou56vepb.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "834710560139-qg5lgecg1mh7n2d80mgl3f11mjlnvudi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.calderani.rafael.tetoedc",
+            "certificate_hash": "84c86c74e095ad200d355442caa26e6e55963ad2"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApoGgqRCqRMNyPKrNa1VE1zTRNKciQLCY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "834710560139-lch3tbfrpd46hmdfebr4n4obou56vepb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

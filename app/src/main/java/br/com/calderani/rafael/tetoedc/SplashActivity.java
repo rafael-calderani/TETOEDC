@@ -2,6 +2,7 @@ package br.com.calderani.rafael.tetoedc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +13,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import br.com.calderani.rafael.tetoedc.dao.UserDAO;
+import br.com.calderani.rafael.tetoedc.model.User;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 4000;
@@ -69,9 +74,22 @@ public class SplashActivity extends AppCompatActivity {
     private boolean AuthUser() {
         Boolean result = false;
 
-        /** Verify Facebook Auth */
+        /** Verify User Auth */
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         result = (accessToken != null && !accessToken.isExpired()) || result;
+        SharedPreferences sp = this.getSharedPreferences(
+            getString(R.string.sharedpreferences_name),
+            Context.MODE_PRIVATE);
+        if (sp != null) {
+            String email = sp.getString("USER_EMAIL", "");
+            String userId = sp.getString("USER_ID", "");
+            if (!email.isEmpty()) {
+                UserDAO userDAO = new UserDAO(this);
+                User currentUser = userDAO.authenticateUser(email, userId);
+                CurrentUser.initInstance(currentUser);
+            }
+        }
+
 
         /** Verify Firebase Auth */
         /*

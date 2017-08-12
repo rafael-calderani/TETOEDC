@@ -16,13 +16,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".MyApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".NavigationActivity"
             android:label="@string/app_name"
@@ -37,11 +37,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".NewUserActivity" />
+        <activity android:name=".UserManagementActivity" />
         <activity android:name=".CommunitiesActivity" />
         <activity
             android:name=".CommunityMapsActivity"
-            android:label="@string/title_activity_community_maps">
+            android:label="@string/app_name">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.calderani.rafael.tetoedc.CommunitiesActivity" />
@@ -76,22 +76,22 @@
         <!-- Fabric io ID -->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="bbfd6d3f9c04db35531896395d8d48b548e64771"
-            />
+            android:value="bbfd6d3f9c04db35531896395d8d48b548e64771" />
 
-        <activity android:name=".ScheduleActivity"></activity>
+        <activity android:name=".ScheduleActivity" />
 
         <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        
         <service android:name=".firebase.MyFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".ContactActivity"></activity>
     </application>
 
 </manifest>

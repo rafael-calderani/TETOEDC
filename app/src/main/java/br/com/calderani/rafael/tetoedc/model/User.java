@@ -9,10 +9,6 @@ public class User {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    private String login;
-    public String getLogin() { return login; }
-    public void setLogin(String login) { this.login = login; }
-
     private String password;
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
@@ -33,7 +29,7 @@ public class User {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    private String communityId;
-    public String getCommunityId() { return communityId; }
-    public void setCommunityId(String communityId) { this.communityId = communityId; }
+    private String communityName;
+    public String getCommunityName() { return communityName; }
+    public void setCommunityName(String communityName) { this.communityName = communityName; }
 }
