@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView style="@style/LinearLayoutDefault">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LinearLayoutDefault"
+    tools:context="br.com.calderani.rafael.tetoedc.AboutActivity">
+    <ImageView
+        android:id="@+id/ivAppLogo"
+        android:layout_width="360dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:padding="@dimen/default_padding"
+        android:paddingBottom="30dp"
+        android:background="@drawable/splash"
+        android:contentDescription="@string/app_name"/>
+
+    <LinearLayout style="@style/LinearLayoutInternal"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingTop="@dimen/default_padding">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:layout_weight="0.16"
+            android:text="App Name:" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:layout_weight="0.84"
+            android:text="@string/app_name" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/LinearLayoutInternal"
+        android:layout_margin="@dimen/default_margin">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:layout_weight="0.07"
+            android:text="@string/app_version_text" />
+
+        <TextView
+            android:id="@+id/tvAppVersion"
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:layout_weight="0.94" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/LinearLayoutInternal"
+        android:layout_margin="@dimen/default_margin">
+        <TextView
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:layout_marginRight="@dimen/default_margin"
+            android:text="@string/author_text" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:text="@string/author" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/LinearLayoutInternal"
+        android:layout_margin="@dimen/default_margin"
+        android:gravity="center">
+            <ImageView
+                android:id="@+id/ivCallMe"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="@dimen/icons_about_margin"
+                android:layout_marginRight="@dimen/icons_about_margin"
+                android:background="@drawable/phone_call"
+                android:contentDescription="Call Me" />
+        <ImageView
+            android:id="@+id/ivMessageMe"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="@dimen/icons_about_margin"
+            android:layout_marginRight="@dimen/icons_about_margin"
+            android:background="@drawable/message"
+            android:contentDescription="Message Me" />
+    </LinearLayout>
+    <LinearLayout style="@style/LinearLayoutInternal"
+        android:layout_margin="@dimen/default_margin"
+        android:gravity="center">
+        <TextView
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:text="Call Me"
+            android:layout_width="120dp" />
+        <TextView
+            style="@style/TextAppearance.AppCompat.Custom"
+            android:text="Message Me"
+            android:layout_width="120dp" />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

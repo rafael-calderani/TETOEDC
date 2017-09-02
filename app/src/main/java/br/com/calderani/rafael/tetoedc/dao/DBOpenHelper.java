@@ -24,17 +24,41 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static SQLiteDatabase db;
 
-    private Context ctx;
+    // Table User Data
+    static final String TABLE_USER = "user";
+    private static final String CREATE_TBL_USER = "CREATE TABLE " + TABLE_USER + " (" +
+            " id INTEGER PRIMARY KEY NOT NULL," +
+            " email varchar ( 100 ) NOT NULL," +
+            " password varchar ( 20 )  NOT NULL," +
+            " name varchar ( 255 )  NULL," +
+            " function varchar ( 20 ) NOT NULL," +
+            " communityName varchar ( 50 ) NOT NULL," +
+            " phone varchar ( 20 ) NULL," +
+            " unique(email) ON CONFLICT replace)";
+
+    // Table Project Data
+    static final String TABLE_PROJECT = "project";
+    private static final String CREATE_TBL_PROJECT = "CREATE TABLE " + TABLE_PROJECT + " (" +
+            " name varchar ( 100 ) NOT NULL," +
+            " description varchar ( 255 )  NULL," +
+            " managersFromTeam varchar ( 255 )  NULL," +
+            " managersFromCommunity varchar ( 255 )  NULL," +
+            " status varchar ( 20 ) NOT NULL," +
+            " createdOn varchar ( 20 ) NOT NULL," +
+            " modifiedOn varchar ( 20 ) NOT NULL," +
+            " completedOn varchar ( 20 ) NULL," +
+            " unique(name) ON CONFLICT replace)";
 
     public DBOpenHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
-
-        this.ctx = context;
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         DBOpenHelper.db = db;
-        executeSQLScript(ctx , R.raw.local_db);
+
+        executeSQLScript(CREATE_TBL_USER);
+        executeSQLScript(CREATE_TBL_PROJECT);
     }
 
     @Override
@@ -44,20 +68,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     /**
      * executeSQLScript: Executa script SQL no banco de dados informado
-     * @param ctx: Contexto no qual a chamada está sendo executada (utilizada para obter os recursos do app)
-     * @param sqlResId: ID do recurso específico que será executado
+     * @param sqlScript: Script SQL a ser executado
      */
-    private void executeSQLScript(Context ctx, Integer sqlResId) {
-        Resources res = ctx.getResources();
-        try {
-            InputStream stream = res.openRawResource(sqlResId);
-            String sqlScript = CharStreams.toString(new InputStreamReader(stream, "UTF-8"));
-            db.execSQL(sqlScript);
-            stream.close();
-        } catch (IOException e) {
-            throw new RuntimeException( "Couldn't execute SQL script." , e);
-        }
-    }
     private void executeSQLScript(String sqlScript) {
         db.execSQL(sqlScript);
     }

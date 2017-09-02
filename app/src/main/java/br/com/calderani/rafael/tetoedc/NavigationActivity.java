@@ -1,11 +1,11 @@
 package br.com.calderani.rafael.tetoedc;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -68,15 +68,11 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        SharedPreferences sp = this.getSharedPreferences(
-                getString(R.string.sharedpreferences_name), Context.MODE_PRIVATE);
-
         // TODO: get next event date on the calendar
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
         String date = df.format(c.getTime());
 
-        // TODO: set welcome message correctly
         String welcomeMsg = String.format(
                 getString(R.string.welcome_text),
                 CurrentUser.getInstance().getName(),
@@ -90,9 +86,9 @@ public class NavigationActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            logout();
             //super.onBackPressed();
         }
-        logout();
     }
 
     @Override
@@ -110,6 +106,9 @@ public class NavigationActivity extends AppCompatActivity
             case R.id.action_logout:
                 logout();
                 return true;
+            case R.id.action_quit:
+                quit();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -119,11 +118,11 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Intent i;
-        // TODO: Navigation
+        //TODO: FAQ navigation option and market research for possible FAQs (google forms?)
+
         switch (id) {
             case R.id.nav_profile:
-                i = new Intent(this, UserManagementActivity.class);
+                Intent i = new Intent(this, UserManagementActivity.class);
                 i.putExtra("TYPE", "update");
                 startActivity(i);
                 break;
@@ -134,12 +133,10 @@ public class NavigationActivity extends AppCompatActivity
                 logout();
                 break;
             case R.id.nav_contact:
-                i = new Intent(this, ContactActivity.class);
-                startActivity(i);
+                startActivity(new Intent(this, ContactActivity.class));
                 break;
-            case R.id.nav_faq:
-                Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-                //TODO: market research for possible FAQs (google forms?)
+            case R.id.nav_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.nav_help:
                 Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
@@ -173,8 +170,10 @@ public class NavigationActivity extends AppCompatActivity
 
     @OnClick(R.id.btProjects)
     public void projectsClick() {
-        String url = "https://docs.google.com/spreadsheets/d/1cxO3vSNVOE8W7xWfZiHSmSDMIid4_Dp1hll1Lnk61Vg/edit#gid=1511351235";
-        navigateToUrl(url);
+        //String url = "https://docs.google.com/spreadsheets/d/1cxO3vSNVOE8W7xWfZiHSmSDMIid4_Dp1hll1Lnk61Vg/edit#gid=1511351235";
+        //navigateToUrl(url);
+
+        startActivity(new Intent(this, ProjectsActivity.class));
 
         Bundle b = new Bundle();
         b.putString("Click", "Projects");
@@ -194,8 +193,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @OnClick(R.id.btCommunities)
     public void communitiesClick() {
-        Intent i = new Intent(this, CommunitiesActivity.class);
-        startActivity(i);
+        startActivity(new Intent(this, CommunitiesActivity.class));
 
         Bundle b = new Bundle();
         b.putString("Click", "Communities");
@@ -220,10 +218,40 @@ public class NavigationActivity extends AppCompatActivity
                 if (fbManager != null) fbManager.logOut();
 
                 CurrentUser.finishInstance();
+                SharedPreferences sp = PreferenceManager
+                        .getDefaultSharedPreferences(NavigationActivity.this);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("USER_EMAIL", "");
+                editor.apply();
 
                 Intent i = new Intent(NavigationActivity.this, LoginActivity.class);
                 startActivity(i);
                 dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void quit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setMessage(R.string.quit_confirm);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // TODO: logout on: Google and Twitter
+                LoginManager fbManager = LoginManager.getInstance();
+                if (fbManager != null) fbManager.logOut();
+
+                CurrentUser.finishInstance();
+
+                finishAffinity(); // finish this and all underlying activities if there are any
             }
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

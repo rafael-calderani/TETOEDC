@@ -2,8 +2,11 @@ package br.com.calderani.rafael.tetoedc;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.facebook.stetho.common.LogUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,12 +31,14 @@ import java.util.List;
 
 import br.com.calderani.rafael.tetoedc.api.ApiUtils;
 import br.com.calderani.rafael.tetoedc.api.CommunityAPI;
+import br.com.calderani.rafael.tetoedc.api.Validation;
 import br.com.calderani.rafael.tetoedc.dao.UserDAO;
 import br.com.calderani.rafael.tetoedc.model.Community;
 import br.com.calderani.rafael.tetoedc.model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -62,6 +68,9 @@ public class UserManagementActivity extends AppCompatActivity {
     @BindView(R.id.btDeleteUser)
     Button btDeleteUser;
 
+    @BindView(R.id.btSaveUser)
+    Button btSaveUser;
+
     private ProgressDialog pd;
     private CommunityAPI mService;
     private static final int GPS_PERMISSION = 101;
@@ -69,12 +78,15 @@ public class UserManagementActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter = null;
     private String type = "";
     private String community = "";
+    private UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_management_user);
         ButterKnife.bind(this);
+
+        userDAO = new UserDAO(this);
 
         pd =  new ProgressDialog(this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -85,6 +97,8 @@ public class UserManagementActivity extends AppCompatActivity {
         pd.setCancelable(false);
         pd.show();
 
+        checkErrors();
+
         type = this.getIntent().getStringExtra("TYPE");
         String email = this.getIntent().getStringExtra("EMAIL");
         String password = this.getIntent().getStringExtra("PASSWORD");
@@ -94,33 +108,9 @@ public class UserManagementActivity extends AppCompatActivity {
         if (password != null) etPassword.setText(password);
         if (name != null) etName.setText(name);
 
-        //TODO: check this .equals
-        if (type != null && type.equals("update")) { // edit profile screen
-            User currentUser = CurrentUser.getInstance();
-
-            etEmail.setEnabled(false);
-            etEmail.setText(currentUser.getEmail());
-            etPassword.setText(currentUser.getPassword());
-            etName.setText(currentUser.getName());
-            String function = currentUser.getFunction();
-            community = currentUser.getCommunityName();
-            String[] functions = this.getResources().getStringArray(R.array.function_array);
-            int functionPos =
-                    Arrays.asList(functions).indexOf(function);
-            ddlFunction.setSelection(functionPos);
-            etPhone.setText(currentUser.getPhone());
-
-            btDeleteUser.setVisibility(View.VISIBLE);
-        }
-        else if (type == "continue registration") { // first login with facebook, google or twitter
-            Toast.makeText(this, R.string.user_creation_continue, Toast.LENGTH_LONG).show();
-
-            etEmail.setEnabled(false);
-            etPassword.setEnabled(false);
-        }
-
         // Carrega ddlCommunity usando o serviço web via json
         communityNames = new ArrayList<>();
+
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, communityNames);
         mService = ApiUtils.getCommunitiesAPI();
 
@@ -131,16 +121,14 @@ public class UserManagementActivity extends AppCompatActivity {
             .subscribe(new Subscriber<List<Community>>() {
                 @Override
                 public void onCompleted() {
-                    pd.hide();
-                    //pbLoading.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     Toast.makeText(getApplicationContext(), String.format(getString(R.string.service_error_message), e.getMessage()),
                             Toast.LENGTH_LONG).show();
-                    //TODO: Verificar Log do Stetho
-                    // LogUtil.e(e, String.format(getString(R.string.service_error_message), e.getMessage()));
+
+                    LogUtil.e(e, String.format(getString(R.string.service_error_message), e.getMessage()));
                 }
 
                 @Override
@@ -155,6 +143,33 @@ public class UserManagementActivity extends AppCompatActivity {
                     }
                     ddlCommunity.setAdapter(adapter);
                     ddlCommunity.setSelection(selectedCommunity);
+                    pd.hide();
+
+                    if (type != null && type.equals("update")) { // edit profile screen
+                        User currentUser = CurrentUser.getInstance();
+
+                        etEmail.setEnabled(false);
+                        etEmail.setText(currentUser.getEmail());
+                        etPassword.setText(currentUser.getPassword());
+                        etName.setText(currentUser.getName());
+                        String function = currentUser.getFunction();
+                        community = currentUser.getCommunityName();
+                        String[] functions = UserManagementActivity.this
+                                .getResources().getStringArray(R.array.function_array);
+                        int functionPos =
+                                Arrays.asList(functions).indexOf(function);
+                        ddlFunction.setSelection(functionPos);
+                        etPhone.setText(currentUser.getPhone());
+
+                        btDeleteUser.setVisibility(View.VISIBLE);
+                    }
+                    else if (type != null && type.equals("continue registration")) { // first login with facebook, google or twitter
+                        Toast.makeText(UserManagementActivity.this,
+                                R.string.user_creation_continue, Toast.LENGTH_LONG).show();
+
+                        etEmail.setEnabled(false);
+                        etPassword.setEnabled(false);
+                    }
                 }
             });
     }
@@ -168,7 +183,6 @@ public class UserManagementActivity extends AppCompatActivity {
         final String function = ddlFunction.getSelectedItem().toString();
         final String phone = etPhone.getText().toString();
 
-        UserDAO userDAO = new UserDAO(this);
         boolean userExists = userDAO.exists(login);
         if (userExists && type == null) {
             Toast.makeText(this, R.string.existing_user, Toast.LENGTH_SHORT).show();
@@ -195,6 +209,12 @@ public class UserManagementActivity extends AppCompatActivity {
         CurrentUser.initInstance(user);
 
 
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("USER_EMAIL", login);
+        editor.apply();
+
+
         Toast.makeText(this, R.string.user_creation_success,
                 Toast.LENGTH_SHORT).show();
 
@@ -212,7 +232,6 @@ public class UserManagementActivity extends AppCompatActivity {
         builder.setIcon(R.mipmap.ic_launcher);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                UserDAO userDAO = new UserDAO(UserManagementActivity.this);
                 int message = R.string.user_deletion;
                 if (!userDAO.delete(CurrentUser.getInstance().getEmail())) {
                     message = R.string.user_deletion_error;
@@ -232,6 +251,42 @@ public class UserManagementActivity extends AppCompatActivity {
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @OnFocusChange({R.id.etEmail})
+    public void validateEmail(boolean hasFocus) {
+        Validation.isEmailAddress(etEmail, true,
+                getResources().getString(R.string.validation_email));
+        checkErrors();
+    }
+
+    @OnFocusChange({R.id.etPassword})
+    public void validatePassword(boolean hasFocus){
+        Validation.validateMinimumLength(etPassword, 6,
+                getResources().getString(R.string.validation_minlength));
+        checkErrors();
+    }
+
+    @OnFocusChange({R.id.etName})
+    public void validateName(boolean hasFocus){
+        Validation.hasText(etName, getResources().getString(R.string.validation_required_field));
+        checkErrors();
+    }
+
+    @OnFocusChange({R.id.etPhone})
+    public void validatePhone(boolean hasFocus){
+        Validation.isPhoneNumber(etPhone, false,
+                getResources().getString(R.string.validation_phone));
+        checkErrors();
+    }
+
+    private void checkErrors() {
+        btSaveUser.setEnabled(
+                etEmail.getError() == null &&
+                etPassword.getError() == null &&
+                etName.getError() == null &&
+                etPhone.getError() == null
+        );
     }
 
     @Override

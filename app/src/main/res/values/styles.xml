@@ -27,6 +27,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
+    <style name="TextAppearance.AppCompat.Custom" parent="TextAppearance.AppCompat.Default">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
     <style name="controls_default">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -68,5 +71,17 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:padding">5dp</item>
         <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <style name="LinearLayoutDefault">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="LinearLayoutInternal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 </resources>

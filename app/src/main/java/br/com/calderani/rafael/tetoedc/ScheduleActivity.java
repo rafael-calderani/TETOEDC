@@ -9,17 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,12 +31,14 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.calderani.rafael.tetoedc.api.EventDecorator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -62,19 +59,12 @@ public class ScheduleActivity extends AppCompatActivity
     TextView tvOutput;
 
     @BindView(R.id.calendar)
-    CalendarView calendar;
+    MaterialCalendarView calendar;
 
-    private static final String CALENDAR_LOCATION = "content://com.android.calendar/calendars";
-    private static final Uri CALENDAR_URI = Uri.parse(CALENDAR_LOCATION);
-    private static final String CALENDAR_ID = "_id";
-    private static final String CALENDAR_TITLE = "TETO-EDC";
 
-    private static final String PREF_ACCOUNT_NAME = "rafael.calderani@gmail.com";
-    private static final String ACCOUNT_NAME = "olaria.sp@teto.org.br";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY, CalendarScopes.CALENDAR };
+    private static String ACCOUNT_NAME = "rafael.calderani@gmail.com"; //TODO: get community acc name (olaria.sp@teto.org.br)
 
-    private ListView calendarView;
-    private ArrayAdapter<String> calendarAdapter;
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY }; // CalendarScopes.CALENDAR
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,45 +72,19 @@ public class ScheduleActivity extends AppCompatActivity
         setContentView(R.layout.activity_schedule);
         ButterKnife.bind(this);
 
-        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
         pbCalendar = new ProgressDialog(this);
         pbCalendar.setMessage("Calling Google Calendar API ...");
 
         // Initialize credentials and service object.
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                //.setSelectedAccountName(PREF_ACCOUNT_NAME)
-                .setBackOff(new ExponentialBackOff());
+        mCredential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
+                Arrays.asList(SCOPES)).setBackOff(new ExponentialBackOff());
+
+        //mCredential = GoogleAccountCredential.usingAudience(getApplicationContext(),
+        //        String.format("server:client_id:%s.apps.googleusercontent.com", OAUTH_CLIENT_ID));
+        //mCredential.setSelectedAccountName(ACCOUNT_NAME);
 
         tvOutput.setText("");
         getResultsFromApi();
-    }
-
-    /**
-     * Callback for when a permission is granted using the EasyPermissions
-     * library.
-     * @param requestCode The request code associated with the requested
-     *         permission
-     * @param perms The requested permission list. Never null.
-     */
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-    }
-
-    /**
-     * Callback for when a permission is denied using the EasyPermissions
-     * library.
-     * @param requestCode The request code associated with the requested
-     *         permission
-     * @param perms The requested permission list. Never null.
-     */
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-
     }
 
     /**
@@ -133,11 +97,14 @@ public class ScheduleActivity extends AppCompatActivity
     private void getResultsFromApi() {
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
-        } else if (mCredential.getSelectedAccountName() == null) {
+        }
+        else if (!isDeviceOnline()) {
+            tvOutput.setText(R.string.no_network);
+        }
+        else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-        } else if (!isDeviceOnline()) {
-            tvOutput.setText("No network connection available.");
-        } else {
+        }
+        else {
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -154,29 +121,25 @@ public class ScheduleActivity extends AppCompatActivity
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-                this, Manifest.permission.GET_ACCOUNTS)) {
-            String accountName = getPreferences(Context.MODE_PRIVATE)
-                    .getString(PREF_ACCOUNT_NAME, null);
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.GET_ACCOUNTS)) {
+            String accountName = getPreferences(Context.MODE_PRIVATE).getString(ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                getResultsFromApi();
-            } else {
-                // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        mCredential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
             }
-
-            //mCredential.setSelectedAccountName(PREF_ACCOUNT_NAME);
-            //getResultsFromApi();
-        } else { // Request GET_ACCOUNTS permission to the user
+            else { // Start a dialog from which the user can choose an account
+                Intent gAccountPicker = mCredential.newChooseAccountIntent();
+                gAccountPicker.putExtra(AccountManager.KEY_ACCOUNT_NAME, ACCOUNT_NAME);
+                startActivityForResult(gAccountPicker, REQUEST_ACCOUNT_PICKER);
+            }
+        }
+        else { // Request GET_ACCOUNTS permission to the user
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    getString(R.string.contacts_permission_request),
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
+        getResultsFromApi();
     }
 
     /**
@@ -197,22 +160,19 @@ public class ScheduleActivity extends AppCompatActivity
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
                     tvOutput.setText(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                            getString(R.string.googlePlayServices_required));
                 } else {
                     getResultsFromApi();
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
                         SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
+                        editor.putString(ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
                         getResultsFromApi();
@@ -261,8 +221,7 @@ public class ScheduleActivity extends AppCompatActivity
      *     date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         final int connectionStatusCode =
                 apiAvailability.isGooglePlayServicesAvailable(this);
         return connectionStatusCode == ConnectionResult.SUCCESS;
@@ -273,8 +232,7 @@ public class ScheduleActivity extends AppCompatActivity
      * Play Services installation via a user dialog, if possible.
      */
     private void acquireGooglePlayServices() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         final int connectionStatusCode =
                 apiAvailability.isGooglePlayServicesAvailable(this);
         if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
@@ -298,6 +256,12 @@ public class ScheduleActivity extends AppCompatActivity
         dialog.show();
     }
 
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {}
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {}
+
     /**
      * An asynchronous task that handles the Google Calendar API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
@@ -310,8 +274,7 @@ public class ScheduleActivity extends AppCompatActivity
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("TETOEDC")
+                    transport, jsonFactory, credential).setApplicationName("TETOEDC API")
                     .build();
         }
 
@@ -340,24 +303,32 @@ public class ScheduleActivity extends AppCompatActivity
         private List<String> getDataFromApi() throws IOException {
             // List the next 10 events from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
-            List<String> eventStrings = new ArrayList<String>();
-            Events events = mService.events().list("primary")
-                    .setMaxResults(10)
-                    .setTimeMin(now)
-                    .setOrderBy("startTime")
-                    .setSingleEvents(true)
-                    .execute();
-            List<Event> items = events.getItems();
+            List<String> eventStrings = new ArrayList<>();
+            try {
+                Events events = mService.events().list("primary")
+                        .setMaxResults(10)
+                        .setTimeMin(now)
+                        .setOrderBy("startTime")
+                        .setSingleEvents(true)
+                        .execute();
+                List<Event> items = events.getItems();
 
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null) {
-                    // All-day events don't have start times, so just use
-                    // the start date.
-                    start = event.getStart().getDate();
+                for (Event event : items) {
+                    calendar.addDecorator(new EventDecorator(R.color.colorPrimary, items));
+                    // TODO: populate items??
+                    DateTime start = event.getStart().getDateTime();
+                    if (start == null) {
+                        // All-day events don't have start times, so just use
+                        // the start date.
+                        start = event.getStart().getDate();
+                    }
+                    eventStrings.add(
+                            String.format("%s (%s)", event.getSummary(), start));
                 }
-                eventStrings.add(
-                        String.format("%s (%s)", event.getSummary(), start));
+                //calendar.set
+            }
+            catch (UserRecoverableAuthIOException e) {
+                startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             }
             return eventStrings;
         }

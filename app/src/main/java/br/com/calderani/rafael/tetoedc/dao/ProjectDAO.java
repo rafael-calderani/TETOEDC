@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import br.com.calderani.rafael.tetoedc.model.Project;
-import br.com.calderani.rafael.tetoedc.model.User;
 
 /**
  * Created by Rafael on 05/08/2017.
@@ -17,13 +18,9 @@ import br.com.calderani.rafael.tetoedc.model.User;
 
 public class ProjectDAO {
     private DBOpenHelper dbHelper;
-    public static final String TABLE_NAME = "project";
-    public static final String SQL_LIST_PROJECTS =
-            "SELECT name, description, status, createdOn, modifiedOn, completedOn FROM project";
-    public static final String SQL_GET_PROJECT_BY_NAME =
-            "SELECT description, status, createdOn, modifiedOn, completedOn FROM user WHERE name = ?";
-    public static final String SQL_EXISTS_PROJECT = "SELECT 1 FROM user WHERE name = ?";
-
+    private final String SQL_LIST_PROJECTS =
+            "SELECT name, description, managersFromTeam, managersFromCommunity, status, createdOn, modifiedOn, completedOn FROM project";
+    private final String SQL_EXISTS_PROJECT = "SELECT 1 FROM project WHERE name = ?";
 
     public ProjectDAO(Context context) {
         dbHelper = new DBOpenHelper(context);
@@ -39,32 +36,51 @@ public class ProjectDAO {
 
     public boolean insert(Project project){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
+        String date = df.format(c.getTime());
+
         ContentValues values = new ContentValues();
         values.put("name", project.getName());
         values.put("description", project.getDescription());
+        values.put("managersFromTeam", project.getManagersFromTeam());
+        values.put("managersFromCommunity", project.getManagersFromCommunity());
         values.put("status", project.getStatus());
-        //values.put("createdOn", project.getCreatedOn());
-        values.put("completedOn", project.getCompletedOn());
+        values.put("createdOn", date);
+        values.put("modifiedOn", date);
+        if (project.getStatus() == "Completed" || project.getStatus() == "Concluído") {
+            values.put("completedOn", date);
+        }
 
-        long dbResult = db.insert(TABLE_NAME, null, values);
+        long dbResult = db.insert(DBOpenHelper.TABLE_PROJECT, null, values);
 
         return dbResult == 1;
     }
 
     public boolean update(Project project){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
+        String date = df.format(c.getTime());
+
         ContentValues values = new ContentValues();
         values.put("description", project.getDescription());
+        values.put("managersFromTeam", project.getManagersFromTeam());
+        values.put("managersFromCommunity", project.getManagersFromCommunity());
         values.put("status", project.getStatus());
-        values.put("modifiedOn", ""); //TODO: get current time and date
-        values.put("completedOn", project.getCompletedOn());
+        values.put("modifiedOn", date);
+        if (project.getStatus() == "completed") {
+            values.put("completedOn", date);
+        }
 
-        long dbResult = db.update(TABLE_NAME, values, "name = ?", new String[] { project.getName() });
+        long dbResult = db.update(DBOpenHelper.TABLE_PROJECT, values, "name = ?", new String[] { project.getName() });
 
         return dbResult == 1;
     }
 
-    public  boolean save(Project project) {
+    public boolean save(Project project) {
         if (exists(project.getName()))
             return update(project);
         else return insert(project);
@@ -72,30 +88,10 @@ public class ProjectDAO {
 
     public boolean delete(String name){
         try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
-            long dbResult = db.delete(TABLE_NAME, "name = ?", new String[]{ name });
+            long dbResult = db.delete(DBOpenHelper.TABLE_PROJECT, "name = ?", new String[]{ name });
 
             return dbResult == 1;
         }
-    }
-
-    public Project getProjectByName(String name){
-        Project project = null;
-        try (SQLiteDatabase db = dbHelper.getWritableDatabase()) {
-            if(exists(name)){
-                try (Cursor cursor = db.rawQuery(SQL_GET_PROJECT_BY_NAME, new String[] { name })) {
-                    cursor.moveToNext();
-                    project = new Project();
-                    project.setName(name);
-                    project.setDescription(cursor.getString(1));
-                    project.setStatus(cursor.getString(2));
-                    project.setCreatedOn(cursor.getString(3));
-                    project.setModifiedOn(cursor.getString(4));
-                    project.setCompletedOn(cursor.getString(5));
-                }
-            }
-        }
-
-        return project;
     }
 
     public List<Project> listProjects() {
@@ -107,10 +103,12 @@ public class ProjectDAO {
                     project = new Project();
                     project.setName(cursor.getString(0));
                     project.setDescription(cursor.getString(1));
-                    project.setStatus(cursor.getString(2));
-                    project.setCreatedOn(cursor.getString(3));
-                    project.setModifiedOn(cursor.getString(4));
-                    project.setCompletedOn(cursor.getString(5));
+                    project.setManagersFromTeam(cursor.getString(2));
+                    project.setManagersFromCommunity(cursor.getString(3));
+                    project.setStatus(cursor.getString(4));
+                    project.setCreatedOn(cursor.getString(5));
+                    project.setModifiedOn(cursor.getString(6));
+                    project.setCompletedOn(cursor.getString(7));
 
                     projects.add(project);
                 }

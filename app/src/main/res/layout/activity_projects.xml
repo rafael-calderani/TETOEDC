@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LinearLayoutDefault"
+    tools:context="br.com.calderani.rafael.tetoedc.ProjectsActivity"
+    android:background="@android:color/darker_gray"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.RecyclerView
+        style="@style/controls_default"
+        android:id="@+id/rvProjects" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddProject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@android:drawable/ic_input_add" />
+</LinearLayout>

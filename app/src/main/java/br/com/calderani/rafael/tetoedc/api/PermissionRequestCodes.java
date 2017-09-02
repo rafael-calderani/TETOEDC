@@ -12,6 +12,6 @@ public class PermissionRequestCodes {
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     /** Cellphone Permissions */
-    public static final int GPS_FINE_PERMISSION = 101;
-    public static final int GPS_COARSE_PERMISSION = 102;
+    public static final int GPS_FINE_PERMISSION = 2001;
+    public static final int GPS_COARSE_PERMISSION = 2002;
 }

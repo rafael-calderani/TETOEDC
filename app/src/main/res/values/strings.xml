@@ -1,7 +1,6 @@
 <resources>
     <!-- Common -->
     <string name="app_name" translatable="false">TETO - EDC</string>
-    <string name="sharedpreferences_name" translatable="false">TETOEDCInfo</string>
     <string name="facebook_app_id" translatable="false">335573473547858</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb335573473547858</string>
     <string name="service_error_message">Service Error. Details: %s</string>
@@ -10,18 +9,24 @@
     <string name="not_implemented">Sorry. Method not implemented yet.</string>
     <string name="blank_field">You need to fill the %s before clicking here.</string>
     <string name="logout_confirm">Do you really want to logout?</string>
+    <string name="quit_confirm">Do you really want to quit?</string>
+    <string name="validation_phone">Invalid phone. Ex.: (##) #####-####</string>
+    <string name="validation_email">Invalid e-mail.</string>
+    <string name="validation_required_field">Mandatory field.</string>
+    <string name="validation_minlength">This field requires at least %s characters.</string>
+    <string name="author" translatable="false">Rafael dos Santos Calderani</string>
 
     <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_logout">Logout</string>
-    <string name="sampleEmail" translatable="false">edc@teto.org.br</string>
+    <string name="nav_logout" translatable="false">Logout</string>
+    <string name="nav_quit">Quit</string>
+    <string name="tetoBrasilSite" translatable="false">http://www.techo.org/paises/brasil</string>
     <string name="user_image">User Image</string>
     <string name="management">Management</string>
-    <string name="about">About</string>
+    <string name="about">About Us</string>
     <string name="help">Help</string>
-    <string name="contact_us">Contact Us</string>
-    <string name="faq" translatable="false">F.A.Q.</string>
+    <string name="contact">Contact</string>
     <string name="edit_profile">Edit Profile</string>
 
     <!-- Login Activity -->
@@ -44,7 +49,7 @@
     <string name="user_deletion_error">Error while deleting user.</string>
     <string name="delete">Delete</string>
     <string name="user_deletion_confirm">Do you really want to erase your user?</string>
-    <string name="user_creation_continue">Almost done, just fill in your Function, Community Name and Phone Number and we are all set!</string>
+    <string name="user_creation_continue">Almost done, just fill in your Community, Function and Phone Number and we are all set!</string>
     <string name="user_creation_error">There was an error when trying to add/update this User.</string>
     <string name="user_creation_success">Amazing! Welcome to our awesome group!</string>
     <string name="loading_communities">Loading communities...</string>
@@ -65,4 +70,36 @@
     <!-- Contact Activity -->
     <string name="subject">Subject</string>
     <string name="send">Send</string>
+
+    <!-- Schedule Activity -->
+    <string name="googlePlayServices_required">This app requires Google Play Services.\nPlease install Google Play Services on your device and relaunch this app.</string>
+    <string name="contacts_permission_request">This app needs to access your community account (via Contacts).</string>
+    <string name="no_network">No network connection available.</string>
+
+    <!-- About Activity -->
+    <string name="author_text">Author:</string>
+    <string name="app_version_text">App Version:</string>
+    <string name="emptyProjectsList">You don\'t have any projects recorded, click on the + button below to add one.</string>
+
+    <!-- Status Array -->
+    <string name="status_NotStarted">Not Started</string>
+    <string name="status_Ongoing">Ongoing</string>
+    <string name="status_Paused">Paused</string>
+    <string name="status_Completed">Completed</string>
+    <string name="status_Cancelled">Cancelled</string>
+    <string name="completed_on">Completed On</string>
+    <string name="modified_on">Modified On</string>
+    <string name="created_on">Created On</string>
+
+    <!-- Project Management Activity -->
+    <string name="status" translatable="false">Status</string>
+    <string name="managersCommunity">Managers From Community</string>
+    <string name="managersTeam">Managers From Team</string>
+    <string name="description">Description</string>
+    <string name="projectName">Project Name</string>
+    <string name="project_creation_success">Project inserted / updated successfully.</string>
+    <string name="project_creation_error">There was an error when saving this project.</string>
+    <string name="project_deletion">Project deleted successfully.</string>
+    <string name="project_deletion_error">There was an error when deleting this project.</string>
+    <string name="project_deletion_confirm">Do you really want to delete your project?</string>
 </resources>

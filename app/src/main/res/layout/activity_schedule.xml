@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    style="@style/LinearLayoutDefault"
     tools:context="br.com.calderani.rafael.tetoedc.ScheduleActivity">
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mcv_showOtherDates="all"
+            app:mcv_selectionColor="#00F"
+            />
 
-        <CalendarView
-            style="@style/controls_default"
-            android:id="@+id/calendar">
-        </CalendarView>
         <TextView
             style="@style/controls_default"
             android:id="@+id/tvOutput"/>

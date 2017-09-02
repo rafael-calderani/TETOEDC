@@ -6,6 +6,8 @@ import android.widget.EditText;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import br.com.calderani.rafael.tetoedc.R;
+
 /**
  * Created by Rafael on 11/08/2017.
  */
@@ -15,27 +17,21 @@ public class Validation {
     private static final String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final String PHONE_REGEX = "(\\d{2}) \\d{5}-\\d{4}";
 
-    // Error Messages
-    private static final String REQUIRED_MSG = "Mandatory field.";
-    private static final String EMAIL_MSG = "Invalid email.";
-    private static final String PHONE_MSG = "Invalid phone. Ex.: (##) #####-####";
-    private static final String MINLENGTH_MSG = "This field requires at least %s characters.";
-
-    public static boolean isEmailAddress(EditText editText, boolean required) {
-        return isValid(editText, EMAIL_REGEX, EMAIL_MSG, required);
+    public static boolean isEmailAddress(EditText editText, boolean required, String errorMessage) {
+        return isValid(editText, EMAIL_REGEX, errorMessage, required);
     }
 
-    public static boolean isPhoneNumber(EditText editText, boolean required) {
-        return isValid(editText, PHONE_REGEX, PHONE_MSG, required);
+    public static boolean isPhoneNumber(EditText editText, boolean required, String errorMessage) {
+        return isValid(editText, PHONE_REGEX, errorMessage, required);
     }
 
-    public static boolean validateMinimumLength(EditText editText, int minLength, boolean required) {
+    public static boolean validateMinimumLength(EditText editText, int minLength, String errorMessage) {
         boolean result = true;
         String text = editText.getText().toString().trim();
         editText.setError(null);
 
         if (text.length() < minLength) {
-            editText.setError(String.format(MINLENGTH_MSG, minLength));
+            editText.setError(String.format(errorMessage, minLength));
             result = false;
         }
         return result;
@@ -49,7 +45,7 @@ public class Validation {
         editText.setError(null);
 
         // text required and editText is blank, so return false
-        if ( required && !hasText(editText) ) return false;
+        if ( required && !hasText(editText, errMsg) ) return false;
 
         // pattern doesn't match so returning false
         if (required && !Pattern.matches(regex, text)) {
@@ -62,13 +58,13 @@ public class Validation {
 
     // check the input field has any text or not
     // return true if it contains text otherwise false
-    public static boolean hasText(EditText editText) {
+    public static boolean hasText(EditText editText, String errMsg) {
 
         String text = editText.getText().toString().trim();
         editText.setError(null);
 
         if (text.length() == 0) {
-            editText.setError(REQUIRED_MSG);
+            editText.setError(errMsg);
             return false;
         }
 

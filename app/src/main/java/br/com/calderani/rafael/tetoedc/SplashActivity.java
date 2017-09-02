@@ -1,35 +1,32 @@
 package br.com.calderani.rafael.tetoedc;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
 import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import br.com.calderani.rafael.tetoedc.dao.UserDAO;
 import br.com.calderani.rafael.tetoedc.model.User;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_DISPLAY_LENGTH = 4000;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
-    private Boolean isUserAuthenticated = false;
+    private UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        userDAO = new UserDAO(this);
 
         animateSplash();
     }
@@ -48,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = null;
+                    Intent intent;
                     if (AuthUser()) {
                         intent = new Intent(SplashActivity.this, NavigationActivity.class);
                     }
@@ -67,53 +64,47 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: Autenticar usuário
-     * caso exista e seja válido direcionar para NavigationActivity
-     * se não direcionar par LoginActivity
+     * Verifica se o usuário deseja se manter conectado e valida o usuario.
+     *
+     * @return Verdadeiro se o usuário existe e é válido, Falso caso contrário
      */
     private boolean AuthUser() {
-        Boolean result = false;
-
-        /** Verify User Auth */
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        result = (accessToken != null && !accessToken.isExpired()) || result;
-        SharedPreferences sp = this.getSharedPreferences(
-            getString(R.string.sharedpreferences_name),
-            Context.MODE_PRIVATE);
+        /** Check user on SQLite DB */
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (sp != null) {
+            Boolean keepConnected = sp.getBoolean("KeepConnected", false);
+            if (!keepConnected) return false;
+
             String email = sp.getString("USER_EMAIL", "");
-            String userId = sp.getString("USER_ID", "");
-            if (!email.isEmpty()) {
-                UserDAO userDAO = new UserDAO(this);
-                User currentUser = userDAO.authenticateUser(email, userId);
-                CurrentUser.initInstance(currentUser);
+            String userId;
+
+            if (email.isEmpty()) return false;
+
+            User currentUser;
+
+            /** Verify Facebook Auth */
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            if (accessToken != null && !accessToken.isExpired()) {
+                userId = accessToken.getUserId();
+                currentUser = userDAO.authenticateUser(email, userId);
             }
+            else { /** No social provider, validate user by email only */
+                currentUser = userDAO.authenticateUser(email);
+            }
+
+            if (currentUser == null) return false;
+
+            CurrentUser.initInstance(currentUser);
+
+            // Answer LoginEvent (Fabric io)
+            LoginEvent loginEvent = new LoginEvent();
+            loginEvent.putCustomAttribute("User E-mail", email);
+            loginEvent.putSuccess(true);
+            Answers.getInstance().logLogin(loginEvent);
+
+            return true;
         }
 
-
-        /** Verify Firebase Auth */
-        /*
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    isUserAuthenticated = true;
-                    // User is signed in
-                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    //Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };*/
-
-        //TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        //String currentDeviceId = telephonyManager.getDeviceId();
-        //String currentDeviceNumber = telephonyManager.getLine1Number();
-        //result = (accessToken != null && !accessToken.isExpired()) || result;
-
-        return result;
+        return false;
     }
 }

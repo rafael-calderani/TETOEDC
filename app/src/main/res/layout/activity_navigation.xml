@@ -3,15 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/LinearLayoutDefault"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-
     <include
         layout="@layout/app_bar_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        style="@style/LinearLayoutDefault" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

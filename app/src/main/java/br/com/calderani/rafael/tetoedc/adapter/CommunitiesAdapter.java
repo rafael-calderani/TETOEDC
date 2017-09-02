@@ -15,7 +15,7 @@ import br.com.calderani.rafael.tetoedc.model.Community;
  * Created by Rafael on 22/07/2017.
  */
 
-public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.CommunityViewHolder>{
+public class CommunitiesAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
     private List<Community> communities;
     private OnItemClickListener listener;
 
@@ -30,18 +30,18 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
     }
 
     @Override
-    public CommunityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View customLayout = inflater.inflate(R.layout.item_community,
+        View customLayout = inflater.inflate(R.layout.item_recycler,
                 parent, false);
 
-        return new CommunityViewHolder(customLayout);
+        return new RecyclerViewHolder(customLayout);
     }
 
     @Override
-    public void onBindViewHolder(CommunityViewHolder holder, final int position) {
-        holder.tvName.setText(communities.get(position).getName());
-        holder.tvZone.setText(communities.get(position).getZone());
+    public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
+        holder.tvTitle.setText(communities.get(position).getName());
+        holder.tvDescription.setText(communities.get(position).getZone());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,21 +54,5 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
     @Override
     public int getItemCount() {
         return communities.size();
-    }
-
-
-    class CommunityViewHolder extends RecyclerView.ViewHolder
-    {
-
-        TextView tvName;
-        TextView tvZone;
-
-        CommunityViewHolder(View itemView) {
-            super(itemView);
-            tvName = (TextView) itemView.findViewById(R.id.tvCommunityName);
-            tvZone = (TextView) itemView.findViewById(R.id.tvCommunityZone);
-        }
-
-
     }
 }

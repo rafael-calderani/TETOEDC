@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "834710560139-qg5lgecg1mh7n2d80mgl3f11mjlnvudi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.calderani.rafael.tetoedc",
+            "certificate_hash": "84c86c74e095ad200d355442caa26e6e55963ad2"
+          }
+        },
+        {
           "client_id": "834710560139-ced73nnbppttrtgljp6c1vmp38q0lb31.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "br.com.calderani.rafael.tetoedc",
-            "certificate_hash": "42d684230be255842568919cd024d46d891e1b99"
+            "certificate_hash": "b0349f76ad6da45b54d7d9cddd33b8b9216758b0"
           }
         },
         {
@@ -27,7 +35,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "br.com.calderani.rafael.tetoedc",
-            "certificate_hash": "bb0f4dcfab22ee6dc6b1f9fc847dbdfffaaec55c"
+            "certificate_hash": "9436bac2d2d09a99f41b4f147f522378f5a22990"
           }
         },
         {
@@ -35,11 +43,19 @@
           "client_type": 3
         },
         {
-          "client_id": "834710560139-qg5lgecg1mh7n2d80mgl3f11mjlnvudi.apps.googleusercontent.com",
+          "client_id": "834710560139-3htk9ddspj3ichmm1d4thu7u0vo9bgv2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "br.com.calderani.rafael.tetoedc",
-            "certificate_hash": "84c86c74e095ad200d355442caa26e6e55963ad2"
+            "certificate_hash": "bb0f4dcfab22ee6dc6b1f9fc847dbdfffaaec55c"
+          }
+        },
+        {
+          "client_id": "834710560139-6rtn6o3gbfkvujn8ei9lcro4matleeen.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.calderani.rafael.tetoedc",
+            "certificate_hash": "42d684230be255842568919cd024d46d891e1b99"
           }
         }
       ],

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="function_array">
+    <string-array name="function_array" translatable="false">
         <item>Voluntári@ EDC</item>         <!-- 1 -->
         <item>Voluntári@ Educação</item>    <!-- 2 -->
         <item>Voluntári@ Coordenação</item> <!-- 3 -->
         <item>Voluntári@ Comunicação</item> <!-- 4 -->
         <item>Voluntári@ Jurídic@</item>    <!-- 5 -->
         <item>Outr@</item>                  <!-- 6 -->
+    </string-array>
+    <string-array name="status_array">
+        <item>@string/status_NotStarted</item>      <!-- 1 -->
+        <item>@string/status_Ongoing</item>         <!-- 2 -->
+        <item>@string/status_Paused</item>          <!-- 3 -->
+        <item>@string/status_Completed</item>       <!-- 4 -->
+        <item>@string/status_Cancelled</item>       <!-- 5 -->
     </string-array>
 </resources>

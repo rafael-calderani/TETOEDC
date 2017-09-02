@@ -36,6 +36,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    @Override
+    public void onMessageSent(String s) {
+        super.onMessageSent(s);
+    }
+
     private void showNotification(String title, String body) {
         Intent i = new Intent(this, NavigationActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

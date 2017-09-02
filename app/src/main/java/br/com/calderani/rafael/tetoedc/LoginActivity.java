@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,26 +25,32 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import br.com.calderani.rafael.tetoedc.api.ApiUtils;
+import br.com.calderani.rafael.tetoedc.api.UserAPI;
 import br.com.calderani.rafael.tetoedc.api.Validation;
 import br.com.calderani.rafael.tetoedc.dao.UserDAO;
+import br.com.calderani.rafael.tetoedc.model.MockyUser;
 import br.com.calderani.rafael.tetoedc.model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SIGNUP = 10001;
+    private MockyUser mockyUser;
+    private UserDAO userDAO;
+
     CallbackManager callbackManager;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -68,6 +76,30 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        userDAO = new UserDAO(this);
+
+        UserAPI userAPI = ApiUtils.getUserAPI();
+        userAPI.getUser()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<MockyUser>() {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getApplicationContext(),
+                                String.format(getString(R.string.service_error_message), e.getMessage()),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNext(MockyUser mockyUser) {
+                        LoginActivity.this.mockyUser = mockyUser;
+                    }
+                });
+
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance()
             .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -83,7 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                                             String name = object.getString("name");
                                             String userId = object.getString("id");
 
-                                            UserDAO userDAO = new UserDAO(LoginActivity.this);
                                             if (userDAO.exists(email)) {
                                                 etEmail.setText(email);
                                                 etPassword.setText(userId);
@@ -99,16 +130,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 i.putExtra("PASSWORD", userId);
                                                 i.putExtra("NAME", name);
                                                 startActivityForResult(i , REQUEST_CODE_SIGNUP);
-
-                                                // Update SharedPreferences
-                                                SharedPreferences sp =
-                                                    LoginActivity.this.getSharedPreferences(
-                                                        getString(R.string.sharedpreferences_name),
-                                                        Context.MODE_PRIVATE);
-                                                SharedPreferences.Editor spEditor = sp.edit();
-                                                spEditor.putString("USER_EMAIL", email);
-                                                spEditor.putString("USER_ID", userId);
-                                                spEditor.commit();
                                             }
                                         }
                                     }
@@ -121,8 +142,6 @@ public class LoginActivity extends AppCompatActivity {
                     parameters.putString("fields", "id,name,email,gender");
                     fbRequest.setParameters(parameters);
                     fbRequest.executeAsync();
-
-                    //handleFacebookAccessToken(loginResult.getAccessToken());
                 }
 
                 @Override
@@ -144,11 +163,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sp = this.getSharedPreferences(
-                getString(R.string.sharedpreferences_name),
-                Context.MODE_PRIVATE);
-        etEmail.setText(sp.getString("UserName",""));
-        cbKeepConnected.setChecked(sp.getBoolean("KeepConnected", true));
+        Boolean keepConnected = getPreferences(Context.MODE_PRIVATE)
+                .getBoolean("KeepConnected", true);
+        cbKeepConnected.setChecked(keepConnected);
 
         btSignIn.setEnabled(false);
     }
@@ -160,15 +177,13 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!AuthenticateUser(userName, password)) return;
 
-        SharedPreferences sp = this.getSharedPreferences("TETOEDCInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor spEditor = sp.edit();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("KeepConnected", cbKeepConnected.isChecked());
+        editor.putString("USER_EMAIL", userName);
+        editor.apply();
 
-        spEditor.putString("UserName", userName);
-        spEditor.putBoolean("KeepConnected", cbKeepConnected.isChecked());
-        spEditor.commit();
-
-        // TODO: create Answer LoginEvent (Fabric io)
-        //Crashlytics.setUserEmail(etEmail.getText().toString());
+        // Answer LoginEvent (Fabric io)
         LoginEvent loginEvent = new LoginEvent();
         loginEvent.putCustomAttribute("User E-mail", userName);
         loginEvent.putSuccess(true);
@@ -195,10 +210,19 @@ public class LoginActivity extends AppCompatActivity {
         boolean result = true;
         String toastMessage = getString(R.string.user_auth_success);
 
-        UserDAO userDAO = new UserDAO(this);
         User user = userDAO.authenticateUser(email, password);
         if (user == null) {
-            toastMessage = getString(R.string.user_invalid);
+            if (mockyUser.getUsuario() == email && mockyUser.getSenha() == password) {
+                // valid mocky user i need to redirect to new user screen to finish the registration
+                Intent i = new Intent(LoginActivity.this, UserManagementActivity.class);
+                i.putExtra("TYPE", "continue registration");
+                i.putExtra("EMAIL", email);
+                i.putExtra("PASSWORD", password);
+                startActivityForResult(i , REQUEST_CODE_SIGNUP);
+            }
+            else {
+                toastMessage = getString(R.string.user_invalid);
+            }
             result = false;
         }
         else {
@@ -206,7 +230,9 @@ public class LoginActivity extends AppCompatActivity {
             CurrentUser.initInstance(user);
         }
 
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+        Toast t = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
+        t.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+        t.show();
         return result;
     }
 
@@ -253,19 +279,30 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnFocusChange({R.id.etEmail})
     public void validateEmail(boolean hasFocus) {
-        if (!hasFocus) Validation.isEmailAddress(etEmail, true);
+        String email = etEmail.getText().toString();
+        if (mockyUser != null && mockyUser.getUsuario().equals(email))
+            etEmail.setError(null); // ignore validations if it's the mocky user
+        else
+            Validation.isEmailAddress(etEmail, true,
+                getResources().getString(R.string.validation_email));
         checkErrors();
 
     }
 
     @OnFocusChange({R.id.etPassword})
     public void validatePassword(boolean hasFocus){
-        if (!hasFocus) Validation.validateMinimumLength(etPassword, 6, true);
+        String password = etPassword.getText().toString();
+        if (mockyUser != null && mockyUser.getSenha().equals(password))
+            etPassword.setError(null); // ignore validations if it's the mocky user
+        else
+            Validation.validateMinimumLength(etPassword, 6,
+                getResources().getString(R.string.validation_minlength));
         checkErrors();
     }
 
     private void checkErrors() {
         Button btSignIn = (Button) findViewById(R.id.btSignIn);
+
         btSignIn.setEnabled(
             etEmail.getError() == null && etPassword.getError() == null
         );

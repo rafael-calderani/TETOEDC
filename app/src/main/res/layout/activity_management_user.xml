@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView style="@style/LinearLayoutDefault">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    style="@style/LinearLayoutDefault"
     tools:context="br.com.calderani.rafael.tetoedc.UserManagementActivity"
     android:layout_margin="@dimen/default_margin"
     android:id="@+id/llScreen">
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -40,11 +38,7 @@
             android:maxLength="255"/>
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+    <LinearLayout style="@style/LinearLayoutInternal">
         <TextView
             style="@style/controls_default"
             android:layout_weight="0.7"
@@ -58,11 +52,7 @@
             android:prompt="@string/communityName"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+    <LinearLayout style="@style/LinearLayoutInternal">
         <TextView
             style="@style/controls_default"
             android:layout_weight="0.7"
@@ -100,12 +90,5 @@
         android:background="@drawable/button_default"
         style="@style/button_login"
         android:text="@string/save"/>
-<!--
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="visible"
-        android:gravity = "center_vertical|center_horizontal" /> -->
 </LinearLayout>
+</ScrollView>

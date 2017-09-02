@@ -15,23 +15,22 @@
         android:layout_alignParentBottom="true"/>
 
     <TextView
-        android:id="@+id/tvUserName"
+        android:id="@+id/tvAppName"
         style="@style/TextAppearance.AppCompat.Default"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/ivUserImage"
-        android:paddingLeft="10dp"
+        android:layout_toEndOf="@+id/ivUserImage"
+        android:paddingLeft="5dp"
         android:paddingBottom="25dp"
         android:text="@string/app_name"
-        tools:text="@string/app_name"
         android:textSize="@dimen/text_size_medium"/>
 
     <TextView
-        android:id="@+id/tvUserMail"
+        android:id="@+id/tvNGOSite"
         style="@style/TextAppearance.AppCompat.Default"
+        android:textSize="@dimen/text_size_xsmall"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/ivUserImage"
-        android:paddingLeft="10dp"
-        android:paddingBottom="5dp"
-        android:text="@string/sampleEmail"
-        tools:text="@string/sampleEmail" />
+        android:layout_toEndOf="@+id/ivUserImage"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:text="@string/tetoBrasilSite" />
 </RelativeLayout>
