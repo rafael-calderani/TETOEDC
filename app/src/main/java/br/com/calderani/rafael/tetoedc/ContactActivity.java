@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +29,7 @@ public class ContactActivity extends AppCompatActivity {
     @OnClick(R.id.btSend)
     public void send(){
         //TODO: implement method
+        Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
     }
 
 }
