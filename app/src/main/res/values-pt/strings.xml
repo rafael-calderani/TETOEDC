@@ -74,4 +74,12 @@
     <string name="project_deletion">Projeto excluido com sucesso.</string>
     <string name="project_deletion_error">Ocorreu um erro ao excluir o projeto.</string>
     <string name="project_deletion_confirm">Você tem certeza que deseja excluir esse projeto?</string>
+    <string name="call_me">Ligue para nós</string>
+    <string name="message_me">Nos mande uma mensagem</string>
+    <string name="phoneCallPermissionRequest">Precisamos de permissão para fazer ligações para isso.</string>
+    <string name="smsPermissionRequest">Precisamos de permissão para enviar mensagens para isso.</string>
+    <string name="resource_unavailable">Infelizmente, seu dispositivo não comporta essa funcionalidade.</string>
+    <string name="share_message">Este app é incrível! Faça o teste. ;)</string>
+    <string name="share_with">Compartilhe com:</string>
+    <string name="storagePermissionRequest">Precisamos de permissão para gerenciar arquivos para prosseguir.</string>
 </resources>

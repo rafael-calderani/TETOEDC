@@ -25,6 +25,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -134,7 +136,11 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }
                                     catch (JSONException e){
-                                        String a = e.getMessage();
+                                        Bundle b = new Bundle();
+                                        b.putString("Type", e.toString());
+                                        b.putString("Message", e.getMessage());
+                                        FirebaseAnalytics.getInstance(LoginActivity.this)
+                                                .logEvent("FacebookLoginError", b);
                                     }
                                 }
                             });
@@ -212,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
 
         User user = userDAO.authenticateUser(email, password);
         if (user == null) {
-            if (mockyUser.getUsuario() == email && mockyUser.getSenha() == password) {
+            if (mockyUser.getUsuario().equals(email) && mockyUser.getSenha().equals(password)) {
                 // valid mocky user i need to redirect to new user screen to finish the registration
                 Intent i = new Intent(LoginActivity.this, UserManagementActivity.class);
                 i.putExtra("TYPE", "continue registration");
@@ -253,9 +259,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-        //TODO: check if user exists and send an e-mail with a new random 6 digit password
-        //TODO: request user permission to send e-mail?
+        if (userDAO.exists(userName)) {
+            Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+            //TODO: send an e-mail with a new random 6 digit password
+        }
+        else {
+            Toast.makeText(this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -277,49 +287,34 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     @OnFocusChange({R.id.etEmail})
-    public void validateEmail(boolean hasFocus) {
+    public void validateEmail() {
         String email = etEmail.getText().toString();
         if (mockyUser != null && mockyUser.getUsuario().equals(email))
             etEmail.setError(null); // ignore validations if it's the mocky user
         else
             Validation.isEmailAddress(etEmail, true,
                 getResources().getString(R.string.validation_email));
-        checkErrors();
 
     }
 
     @OnFocusChange({R.id.etPassword})
-    public void validatePassword(boolean hasFocus){
+    public void validatePassword(){
         String password = etPassword.getText().toString();
         if (mockyUser != null && mockyUser.getSenha().equals(password))
             etPassword.setError(null); // ignore validations if it's the mocky user
         else
             Validation.validateMinimumLength(etPassword, 6,
                 getResources().getString(R.string.validation_minlength));
-        checkErrors();
     }
 
-    private void checkErrors() {
+    @OnTextChanged({R.id.etEmail, R.id.etPassword})
+    void checkErrors() {
         Button btSignIn = (Button) findViewById(R.id.btSignIn);
 
         btSignIn.setEnabled(
             etEmail.getError() == null && etPassword.getError() == null
         );
     }
-/*
-    @Override
-    public void onStart() {
-        super.onStart();
-        firebaseAuth.addAuthStateListener(firebaseAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (firebaseAuthListener != null) {
-            firebaseAuth.removeAuthStateListener(firebaseAuthListener);
-        }
-    }
-    */
 }

@@ -29,6 +29,7 @@ public class CommunityMapsActivity extends FragmentActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -54,6 +55,7 @@ public class CommunityMapsActivity extends FragmentActivity implements OnMapRead
                 .position(deviceLocation)
                 .title("You are here."));
         */
+
         // Marker for Community
         LatLng communityLocation = new LatLng(
                 Double.parseDouble(community.getLatitude()),
@@ -65,13 +67,5 @@ public class CommunityMapsActivity extends FragmentActivity implements OnMapRead
                 .snippet(community.getZone()));
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(communityLocation, 17));
-
-        /*
-        PolylineOptions rectOptions = new PolylineOptions();
-        rectOptions.color(Color.argb(255, 85, 166, 27)); // color of the route
-        rectOptions.add(deviceLocation);
-        rectOptions.add(communityLocation);
-        map.addPolyline(rectOptions);
-        */
     }
 }

@@ -15,11 +15,15 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 
+import br.com.calderani.rafael.tetoedc.api.ApiUtils;
+import br.com.calderani.rafael.tetoedc.api.Validation;
 import br.com.calderani.rafael.tetoedc.dao.ProjectDAO;
 import br.com.calderani.rafael.tetoedc.model.Project;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 
 public class ProjectManagementActivity extends AppCompatActivity {
 
@@ -71,7 +75,9 @@ public class ProjectManagementActivity extends AppCompatActivity {
             ddlStatus.setSelection(statusPos);
             tvCreatedOn.setText(project.getCreatedOn());
             tvModifiedOn.setText(project.getModifiedOn());
-            tvCompletedOn.setText(project.getCompletedOn());
+            if (!project.getCompletedOn().isEmpty()) {
+                tvCompletedOn.setText(project.getCompletedOn());
+            }
             btDeleteProject.setVisibility(View.VISIBLE);
         }
         else { // New project
@@ -79,9 +85,13 @@ public class ProjectManagementActivity extends AppCompatActivity {
         }
     }
 
-
     @OnClick(R.id.btSaveProject)
     public void saveProject() {
+        if (!validateRecord()) {
+            Toast.makeText(this, "Please fill out every mandatory field.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         final String pName = etProjectName.getText().toString();
         final String pDescription = etDescription.getText().toString();
         final String pManagersTeam = etManagersFromTeam.getText().toString();
@@ -109,11 +119,8 @@ public class ProjectManagementActivity extends AppCompatActivity {
 
     @OnClick(R.id.btDeleteProject)
     public void deleteProject() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setMessage(R.string.project_deletion_confirm);
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        (new ApiUtils()).ConfirmationDialog(this, R.string.project_deletion_confirm,
+                new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 ProjectDAO projectDAO = new ProjectDAO(ProjectManagementActivity.this);
                 int message = R.string.project_deletion;
@@ -125,13 +132,21 @@ public class ProjectManagementActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, null);
                 finish();
             }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        }, null);
+    }
+
+    @OnFocusChange({R.id.etProjectName, R.id.etDescription, R.id.etManagersFromTeam, R.id.etManagersFromCommunity})
+    void validateRequiredFields(View v, boolean hasFocus){
+        if (hasFocus) return; // validate only on lost focus
+        EditText etCaller = (EditText)v;
+        Validation.hasText(etCaller,
+                getResources().getString(R.string.validation_required_field));
+    }
+
+    boolean validateRecord() {
+        return etProjectName.getError() == null &&
+                etDescription.getError() == null &&
+                etManagersFromTeam.getError() == null &&
+                etManagersFromCommunity.getError() == null;
     }
 }

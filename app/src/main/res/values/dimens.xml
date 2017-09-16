@@ -10,7 +10,10 @@
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_xsmall">8sp</dimen>
-    <dimen name="logo_height">420dp</dimen>
+    <dimen name="logo_height">240dp</dimen>
     <dimen name="corner_radius">8dp</dimen>
     <dimen name="custom_margin">50dp</dimen>
+    <dimen name="small_padding">5dp</dimen>
+    <dimen name="splashPhotoSize1">120dp</dimen>
+    <dimen name="splashPhotoSize2">220dp</dimen>
 </resources>

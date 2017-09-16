@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -41,6 +43,11 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".UserManagementActivity" />
         <activity android:name=".CommunitiesActivity" />
+        <activity android:name=".ContactActivity" />
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".ProjectsActivity" />
+        <activity android:name=".ProjectManagementActivity"></activity>
+        <activity android:name=".ScheduleActivity" />
         <activity
             android:name=".CommunityMapsActivity"
             android:label="@string/app_name">
@@ -80,8 +87,6 @@
             android:name="io.fabric.ApiKey"
             android:value="bbfd6d3f9c04db35531896395d8d48b548e64771" />
 
-        <activity android:name=".ScheduleActivity" />
-
         <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -92,11 +97,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <activity android:name=".ContactActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".ProjectsActivity" />
-        <activity android:name=".ProjectManagementActivity"></activity>
     </application>
 
 </manifest>

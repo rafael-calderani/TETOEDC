@@ -68,8 +68,8 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     public void onSwipeRight() {}
     public void onSwipeLeft() {
-        int id = item.getId();
         //TODO: how should I delete the project?
+        int id = item.getId();
     }
     public void onSwipeTop() {}
     public void onSwipeBottom() {}

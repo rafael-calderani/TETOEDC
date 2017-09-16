@@ -19,9 +19,9 @@ import br.com.calderani.rafael.tetoedc.model.Project;
 public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
     private List<Project> projects;
     private OnItemClickListener clickListener;
-//    private OnSwipeTouchListener swipeListener;
+    //private OnItemSwipeListener swipeListener;
 
-    public ProjectsAdapter(List<Project> p, OnItemClickListener cl/*, OnSwipeTouchListener sl*/){
+    public ProjectsAdapter(List<Project> p, OnItemClickListener cl){ //, OnItemSwipeListener sl
         this.projects = p;
         this.clickListener = cl;
         //this.swipeListener = sl;
@@ -32,11 +32,12 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
         notifyDataSetChanged();
     }
 
+
+
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View customLayout = inflater.inflate(R.layout.item_recycler,
-                parent, false);
+        View customLayout = inflater.inflate(R.layout.item_recycler, parent, false);
 
         return new RecyclerViewHolder(customLayout);
     }
@@ -55,13 +56,9 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
 
         /*
         holder.itemView.setOnTouchListener(new OnSwipeTouchListener(holder.itemView.getContext()) {
-            public void onSwipeRight() { // do the same as regular click
-                clickListener.onItemClick(projects.get(position));
-            }
+            public void onSwipeRight() {}
             public void onSwipeLeft() {
-                //TODO: Confirm Delete Item *not sure if this is supposed to be here
-                Project p = projects.get(position);
-                ProjectDAO.delete(p.getName());
+                swipeListener.onSwipeLeft(projects.get(position));
             }
         });
         */

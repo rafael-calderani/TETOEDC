@@ -11,4 +11,12 @@
         android:orderInCategory="200"
         android:title="@string/nav_quit"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share"
+        android:title="Share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:actionProviderClass=
+            "android.widget.ShareActionProvider"
+        app:showAsAction="ifRoom" />
 </menu>

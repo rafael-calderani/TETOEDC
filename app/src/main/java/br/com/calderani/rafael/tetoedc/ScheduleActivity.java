@@ -58,9 +58,6 @@ public class ScheduleActivity extends AppCompatActivity
     @BindView(R.id.tvOutput)
     TextView tvOutput;
 
-    @BindView(R.id.calendar)
-    MaterialCalendarView calendar;
-
 
     private static String ACCOUNT_NAME = "rafael.calderani@gmail.com"; //TODO: get community acc name (olaria.sp@teto.org.br)
 
@@ -133,13 +130,13 @@ public class ScheduleActivity extends AppCompatActivity
             }
         }
         else { // Request GET_ACCOUNTS permission to the user
+            tvOutput.setText("The app doesn't have permission to proceed, please go back and try again.");
             EasyPermissions.requestPermissions(
                     this,
                     getString(R.string.contacts_permission_request),
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
-        getResultsFromApi();
     }
 
     /**
@@ -314,7 +311,7 @@ public class ScheduleActivity extends AppCompatActivity
                 List<Event> items = events.getItems();
 
                 for (Event event : items) {
-                    calendar.addDecorator(new EventDecorator(R.color.colorPrimary, items));
+                    //calendar.addDecorator(new EventDecorator(R.color.colorPrimary, items));
                     // TODO: populate items??
                     DateTime start = event.getStart().getDateTime();
                     if (start == null) {

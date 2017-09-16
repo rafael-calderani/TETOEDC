@@ -52,12 +52,8 @@ public class CommunitiesActivity extends AppCompatActivity {
                         CommunitiesActivity.this.community = community;
                         showMap();
                     }
-
                     @Override
                     public void onItemClick(Project item) {}
-
-                    @Override
-                    public void onPressAndHold(Project item) {}
                 });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvCommunities.setLayoutManager(layoutManager);

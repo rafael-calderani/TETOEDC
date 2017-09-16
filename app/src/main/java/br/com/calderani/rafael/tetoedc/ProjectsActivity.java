@@ -1,8 +1,11 @@
 package br.com.calderani.rafael.tetoedc;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.calderani.rafael.tetoedc.adapter.OnItemClickListener;
+import br.com.calderani.rafael.tetoedc.adapter.OnItemSwipeListener;
 import br.com.calderani.rafael.tetoedc.adapter.OnSwipeTouchListener;
 import br.com.calderani.rafael.tetoedc.adapter.ProjectsAdapter;
+import br.com.calderani.rafael.tetoedc.api.ApiUtils;
 import br.com.calderani.rafael.tetoedc.dao.ProjectDAO;
 import br.com.calderani.rafael.tetoedc.model.Community;
 import br.com.calderani.rafael.tetoedc.model.Project;
@@ -29,7 +34,6 @@ import butterknife.OnClick;
 public class ProjectsActivity extends AppCompatActivity {
     @BindView(R.id.rvProjects)
     RecyclerView rvProjects;
-    private Project project;
     private ProjectsAdapter pAdapter;
 
     @Override
@@ -45,15 +49,30 @@ public class ProjectsActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(Project item) {
-                project = item;
-                startProjectActivity();
+                startProjectActivity(item);
             }
+        } /*, new OnItemSwipeListener() {
+            @Override
+            public void onSwipeLeft(Community item) {}
 
             @Override
-            public void onPressAndHold(Project item) {
-                //TODO: display confirm and delete item on user acceptance
+            public void onSwipeLeft(final Project item) {
+                (new ApiUtils()).ConfirmationDialog(ProjectsActivity.this,
+                        R.string.project_deletion_confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ProjectDAO projectDAO = new ProjectDAO(ProjectsActivity.this);
+                        int message = R.string.project_deletion;
+                        if (!projectDAO.delete(item.getName())) {
+                            message = R.string.project_deletion_error;
+                        }
+
+                        Toast.makeText(ProjectsActivity.this, message, Toast.LENGTH_SHORT).show();
+                        setResult(Activity.RESULT_OK, null);
+                        finish();
+                    }
+                }, null);
             }
-        });
+        }*/);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvProjects.setLayoutManager(layoutManager);
@@ -74,13 +93,16 @@ public class ProjectsActivity extends AppCompatActivity {
         if (projectList.size() == 0) {
             Toast.makeText(this, R.string.emptyProjectsList, Toast.LENGTH_SHORT).show();
         }
-        else {
-            pAdapter.update(projectList);
-        }
+        pAdapter.update(projectList);
+
     }
 
     @OnClick(R.id.fabAddProject)
-    public void startProjectActivity(){
+    public void addProjectClick(){
+        startProjectActivity(null);
+    }
+
+    public void startProjectActivity(Project project){
         Intent projectDetails = new Intent(
                 ProjectsActivity.this,
                 ProjectManagementActivity.class
@@ -98,6 +120,4 @@ public class ProjectsActivity extends AppCompatActivity {
             loadProjects();
         }
     }
-
-
 }

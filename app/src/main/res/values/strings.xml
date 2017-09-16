@@ -102,4 +102,12 @@
     <string name="project_deletion">Project deleted successfully.</string>
     <string name="project_deletion_error">There was an error when deleting this project.</string>
     <string name="project_deletion_confirm">Do you really want to delete your project?</string>
+    <string name="call_me">Call Me</string>
+    <string name="message_me">Message Me</string>
+    <string name="smsPermissionRequest">The app needs permission to send SMS messages to do this.</string>
+    <string name="phoneCallPermissionRequest">The app needs permission to make a phone call to do this.</string>
+    <string name="resource_unavailable">Unfortunately, it seems your cellphone doesn\'t have this function.</string>
+    <string name="share_with">Share with:</string>
+    <string name="share_message">This app is awesome! Try it out. ;)</string>
+    <string name="storagePermissionRequest">The app needs permission to manage files to do this.</string>
 </resources>

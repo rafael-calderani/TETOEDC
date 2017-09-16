@@ -49,13 +49,13 @@ public class ProjectDAO {
         values.put("status", project.getStatus());
         values.put("createdOn", date);
         values.put("modifiedOn", date);
-        if (project.getStatus() == "Completed" || project.getStatus() == "Concluído") {
+        if (project.getStatus().equals("Completed") || project.getStatus().equals("Concluído")) {
             values.put("completedOn", date);
         }
 
         long dbResult = db.insert(DBOpenHelper.TABLE_PROJECT, null, values);
 
-        return dbResult == 1;
+        return dbResult != -1;
     }
 
     public boolean update(Project project){
@@ -71,7 +71,7 @@ public class ProjectDAO {
         values.put("managersFromCommunity", project.getManagersFromCommunity());
         values.put("status", project.getStatus());
         values.put("modifiedOn", date);
-        if (project.getStatus() == "completed") {
+        if (project.getStatus().equals("Completed") || project.getStatus().equals("Concluído")) {
             values.put("completedOn", date);
         }
 

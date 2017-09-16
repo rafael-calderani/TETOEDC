@@ -1,17 +1,22 @@
 package br.com.calderani.rafael.tetoedc;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,13 +30,20 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import br.com.calderani.rafael.tetoedc.api.ApiUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.graphics.BitmapFactory.decodeResource;
+import static br.com.calderani.rafael.tetoedc.api.PermissionRequestCodes.EXTERNAL_STORAGE_PERMISSION;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAnalytics mFirebaseAnalytics;
+    private ShareActionProvider mShareActionProvider;
 
     @BindView(R.id.tvWelcome)
     TextView tvWelcome;
@@ -48,16 +60,6 @@ public class NavigationActivity extends AppCompatActivity
         FirebaseMessaging.getInstance().subscribeToTopic("noticiasTETO");
 
         setSupportActionBar(toolbar);
-
-        //TODO: Check how to work with this to make actions Snackbar.make()
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddProject);
-        //fab.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        Snackbar.make(view, "This will take you to the New Project Activity.", Snackbar.LENGTH_LONG)
-        //                .setAction("Action", null).show();
-        //    }
-        //});
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -95,6 +97,13 @@ public class NavigationActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.action_share);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
         return true;
     }
 
@@ -108,6 +117,9 @@ public class NavigationActivity extends AppCompatActivity
                 return true;
             case R.id.action_quit:
                 quit();
+                return true;
+            case R.id.action_share:
+                shareContent();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -207,11 +219,8 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     private void logout(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setMessage(R.string.logout_confirm);
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        (new ApiUtils()).ConfirmationDialog(this, R.string.logout_confirm,
+                new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // TODO: logout on: Google and Twitter
                 LoginManager fbManager = LoginManager.getInstance();
@@ -228,22 +237,11 @@ public class NavigationActivity extends AppCompatActivity
                 startActivity(i);
                 dialog.dismiss();
             }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        }, null);
     }
 
     private void quit() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setMessage(R.string.quit_confirm);
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        (new ApiUtils()).ConfirmationDialog(this, R.string.quit_confirm, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // TODO: logout on: Google and Twitter
                 LoginManager fbManager = LoginManager.getInstance();
@@ -253,13 +251,35 @@ public class NavigationActivity extends AppCompatActivity
 
                 finishAffinity(); // finish this and all underlying activities if there are any
             }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        }, null);
+    }
+
+    @AfterPermissionGranted(EXTERNAL_STORAGE_PERMISSION)
+    private void shareContent() {
+        if(!EasyPermissions.hasPermissions(NavigationActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            EasyPermissions.requestPermissions(NavigationActivity.this,
+                    getString(R.string.storagePermissionRequest), EXTERNAL_STORAGE_PERMISSION,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        else {
+            Bitmap b = decodeResource(getResources(), R.drawable.splash);
+            String url = MediaStore.Images.Media.insertImage(this.getContentResolver(),
+                    b, "Splash", "Awesome App - Splash");
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message)); //TODO: add link to the app on the play store
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
+            shareIntent.setType("image/*");
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(shareIntent, "Share with:"));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] results) {
+        super.onRequestPermissionsResult(requestCode, permissions, results);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, results, this);
     }
 }

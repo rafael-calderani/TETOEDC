@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.LoginEvent;
 import com.facebook.AccessToken;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import br.com.calderani.rafael.tetoedc.dao.UserDAO;
 import br.com.calderani.rafael.tetoedc.model.User;
@@ -32,15 +34,42 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void animateSplash() {
-        Animation anim = AnimationUtils.loadAnimation(this,
+        Animation splashAnimation = AnimationUtils.loadAnimation(this,
                 R.anim.splash_animation);
-        anim.reset();
 
-        ImageView iv = (ImageView) findViewById(R.id.ivSplash);
-        if (iv != null) {
-            iv.clearAnimation();
-            iv.startAnimation(anim);
-        }
+        final Animation photo1Animation = AnimationUtils.loadAnimation(this,
+                R.anim.splash_photos_animation);
+        final Animation photo2Animation = AnimationUtils.loadAnimation(SplashActivity.this,
+                R.anim.splash_photos_animation);
+        final Animation photo3Animation = AnimationUtils.loadAnimation(SplashActivity.this,
+                R.anim.splash_photos_animation);
+
+        photo1Animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                StartAnimation(R.id.ivPhoto2, photo2Animation);
+            }
+        });
+        photo2Animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                StartAnimation(R.id.ivPhoto3, photo3Animation);
+            }
+        });
+
+        StartAnimation(R.id.ivSplash, splashAnimation);
+        StartAnimation(R.id.ivPhoto1, photo1Animation);
+
         try {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -59,7 +88,10 @@ public class SplashActivity extends AppCompatActivity {
             }, SPLASH_DISPLAY_LENGTH);
         }
         catch (Throwable e) {
-            String message = e.getMessage();
+            Bundle b = new Bundle();
+            b.putString("Type", e.toString());
+            b.putString("Message", e.getMessage());
+            FirebaseAnalytics.getInstance(this).logEvent("SplashError", b);
         }
     }
 
@@ -106,5 +138,13 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    private void StartAnimation(int ivId, Animation animation) {
+        animation.reset();
+        ImageView ivPhoto = (ImageView) findViewById(ivId);
+        ivPhoto.setVisibility(View.VISIBLE);
+        ivPhoto.clearAnimation();
+        ivPhoto.startAnimation(animation);
     }
 }

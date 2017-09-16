@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -97,8 +98,6 @@ public class UserManagementActivity extends AppCompatActivity {
         pd.setCancelable(false);
         pd.show();
 
-        checkErrors();
-
         type = this.getIntent().getStringExtra("TYPE");
         String email = this.getIntent().getStringExtra("EMAIL");
         String password = this.getIntent().getStringExtra("PASSWORD");
@@ -120,8 +119,7 @@ public class UserManagementActivity extends AppCompatActivity {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Subscriber<List<Community>>() {
                 @Override
-                public void onCompleted() {
-                }
+                public void onCompleted() {}
 
                 @Override
                 public void onError(Throwable e) {
@@ -175,7 +173,7 @@ public class UserManagementActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btSaveUser)
-    public void saveUser() {
+    void saveUser() {
         final String login = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         final String name = etName.getText().toString();
@@ -225,12 +223,9 @@ public class UserManagementActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btDeleteUser)
-    public void deleteUser() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setMessage(R.string.user_deletion_confirm);
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+    void deleteUser() {
+        (new ApiUtils()).ConfirmationDialog(this, R.string.user_deletion_confirm,
+                new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 int message = R.string.user_deletion;
                 if (!userDAO.delete(CurrentUser.getInstance().getEmail())) {
@@ -243,44 +238,37 @@ public class UserManagementActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        }, null);
     }
 
     @OnFocusChange({R.id.etEmail})
-    public void validateEmail(boolean hasFocus) {
+    void validateEmail(boolean hasFocus){
+        if (hasFocus) return; // validate only on lost focus
         Validation.isEmailAddress(etEmail, true,
                 getResources().getString(R.string.validation_email));
-        checkErrors();
     }
 
-    @OnFocusChange({R.id.etPassword})
-    public void validatePassword(boolean hasFocus){
+    @OnTextChanged({R.id.etPassword})
+    void validatePassword(){
         Validation.validateMinimumLength(etPassword, 6,
                 getResources().getString(R.string.validation_minlength));
-        checkErrors();
     }
 
     @OnFocusChange({R.id.etName})
-    public void validateName(boolean hasFocus){
+    void validateName(boolean hasFocus){
+        if (hasFocus) return; // validate only on lost focus
         Validation.hasText(etName, getResources().getString(R.string.validation_required_field));
-        checkErrors();
     }
 
     @OnFocusChange({R.id.etPhone})
-    public void validatePhone(boolean hasFocus){
+    void validatePhone(boolean hasFocus){
+        if (hasFocus) return; // validate only on lost focus
         Validation.isPhoneNumber(etPhone, false,
                 getResources().getString(R.string.validation_phone));
-        checkErrors();
     }
 
-    private void checkErrors() {
+    @OnTextChanged({R.id.etEmail, R.id.etPassword, R.id.etName, R.id.etPhone})
+    void checkErrors() {
         btSaveUser.setEnabled(
                 etEmail.getError() == null &&
                 etPassword.getError() == null &&

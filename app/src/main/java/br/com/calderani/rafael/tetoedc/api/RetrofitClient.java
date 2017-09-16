@@ -13,17 +13,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static Retrofit retrofit = null;
+    private static Retrofit mockyRetrofit = null;
+    private static Retrofit herokuRetrofit = null;
 
-    public static Retrofit getClient(String baseUrl) {
+
+    public static Retrofit getClient(String client, String baseUrl) {
+        Retrofit retrofit = (client == "heroku") ? herokuRetrofit : mockyRetrofit;
         if (retrofit==null) {
-            OkHttpClient client = new OkHttpClient.Builder()
+            OkHttpClient httpClient = new OkHttpClient.Builder()
                     .addNetworkInterceptor(new StethoInterceptor())
                     .build();
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
-                    .client(client)
+                    .client(httpClient)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

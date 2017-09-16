@@ -14,4 +14,9 @@ public class PermissionRequestCodes {
     /** Cellphone Permissions */
     public static final int GPS_FINE_PERMISSION = 2001;
     public static final int GPS_COARSE_PERMISSION = 2002;
+    public static final int DIAL_CALL_PERMISSION = 2003;
+    public static final int SEND_MESSAGE_PERMISSION = 2004;
+    public static final int READ_MESSAGE_PERMISSION = 2005;
+    public static final int EXTERNAL_STORAGE_PERMISSION = 2006;
+
 }

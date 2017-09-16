@@ -4,15 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LinearLayoutDefault"
     tools:context="br.com.calderani.rafael.tetoedc.ScheduleActivity">
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/calendar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mcv_showOtherDates="all"
-            app:mcv_selectionColor="#00F"
-            />
-
         <TextView
             style="@style/controls_default"
             android:id="@+id/tvOutput"/>
